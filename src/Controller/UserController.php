@@ -21,9 +21,7 @@ class UserController extends MainController
     {
         $datas = $this->em->getRepository(User::class)->findAll();
         foreach ($datas as $data) {
-            $List = $data->getExperience();
-            $experienceList = explode(",", $List);
-            $lists ["users"] [] = ["id" => $data->getId(), "email" => $data->getEmail(), "name" => $data->getName(), "content" => $data->getContent(), "experience" => $experienceList,"image" => $data->getImage()];
+            $lists ["users"] [] = ["id" => $data->getId(), "email" => $data->getEmail(), "name" => $data->getName(), "marches" => $data->getUserMarche(), "image" => $data->getImage(), "Active" => $data->getActiver()];
         }
         return $this->successResponse($lists);
     }
