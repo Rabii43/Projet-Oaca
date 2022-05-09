@@ -2,13 +2,19 @@
 
 namespace App\Controller;
 
+use ApiPlatform\Core\DataProvider\PaginatorInterface;
+use App\Service\FileUploader;
+use App\Service\HeaderAuthGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use JMS\Serializer\SerializerBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use App\Repository\UserRepository;
-
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class MainController extends AbstractController
 {
@@ -16,17 +22,33 @@ class MainController extends AbstractController
      * @var EntityManagerInterface $em
      */
     public $em;
+
+    /**
+     * @var UserPasswordEncoderInterface $passwordEncoder
+     */
+    public $passwordEncoder;
+
+    /**
+     * @var EventDispatcherInterface $dispatsher
+     */
+    public $dispatsher;
+
     /**
      * @var UserRepository $userRepository
      */
     public $userRepository;
 
+
     public function __construct(
-        EntityManagerInterface $em,
-        UserRepository         $userRepository
-    )
-    {
+        UserPasswordEncoderInterface $passwordEncoder,
+        EntityManagerInterface       $em,
+        EventDispatcherInterface     $dispatsher,
+        UserRepository               $userRepository
+
+    ) {
         $this->em = $em;
+        $this->passwordEncoder = $passwordEncoder;
+        $this->dispatsher = $dispatsher;
         $this->userRepository = $userRepository;
     }
 
@@ -39,6 +61,7 @@ class MainController extends AbstractController
     {
         $serializer = SerializerBuilder::create()->build();
         $data = $serializer->serialize($object, 'json');
+
         if ($staus) {
             $response = new Response($data, $staus);
         } else {
@@ -46,8 +69,10 @@ class MainController extends AbstractController
         }
         $response->headers->set('Content-type', 'application/json');
         $response->headers->set('Access-Control-Allow-Origin', '*');
+
         return $response;
     }
+
 
     /**
      * Function to create random password

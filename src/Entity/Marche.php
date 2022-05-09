@@ -211,31 +211,6 @@ class Marche
      */
     private $NBTSup;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Situation::class, mappedBy="situation_marche", cascade={"persist", "remove"})
-     */
-    private $situation;
-
-    /**
-     * @ORM\OneToOne(targetEntity=Direct::class, mappedBy="direct_marche", cascade={"persist", "remove"})
-     */
-    private $direct;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Fournisseur::class, inversedBy="fournisseur_marche")
-     */
-    private $fournisseur;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="user_marche")
-     */
-    private $user;
-
-    public function __construct()
-    {
-        $this->relation = new ArrayCollection();
-    }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -696,74 +671,4 @@ class Marche
 
         return $this;
     }
-
-    public function getSituation(): ?Situation
-    {
-        return $this->situation;
-    }
-
-    public function setSituation(?Situation $situation): self
-    {
-        // unset the owning side of the relation if necessary
-        if ($situation === null && $this->situation !== null) {
-            $this->situation->setSituationMarche(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($situation !== null && $situation->getSituationMarche() !== $this) {
-            $situation->setSituationMarche($this);
-        }
-
-        $this->situation = $situation;
-
-        return $this;
-    }
-
-    public function getDirect(): ?Direct
-    {
-        return $this->direct;
-    }
-
-    public function setDirect(?Direct $direct): self
-    {
-        // unset the owning side of the relation if necessary
-        if ($direct === null && $this->direct !== null) {
-            $this->direct->setDirectMarche(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($direct !== null && $direct->getDirectMarche() !== $this) {
-            $direct->setDirectMarche($this);
-        }
-
-        $this->direct = $direct;
-
-        return $this;
-    }
-
-    public function getFournisseur(): ?Fournisseur
-    {
-        return $this->fournisseur;
-    }
-
-    public function setFournisseur(?Fournisseur $fournisseur): self
-    {
-        $this->fournisseur = $fournisseur;
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-
 }

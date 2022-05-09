@@ -89,20 +89,6 @@ class Fournisseur
      */
     private $remarque;
 
-    /**
-     * @ORM\OneToMany(targetEntity=marche::class, mappedBy="fournisseur")
-     */
-    private $fournisseur_marche;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=user::class, inversedBy="fournisseurs")
-     */
-    private $fournisseur_user;
-
-    public function __construct()
-    {
-        $this->fournisseur_marche = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -273,48 +259,6 @@ class Fournisseur
     public function setRemarque(?string $remarque): self
     {
         $this->remarque = $remarque;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, marche>
-     */
-    public function getFournisseurMarche(): Collection
-    {
-        return $this->fournisseur_marche;
-    }
-
-    public function addFournisseurMarche(marche $fournisseurMarche): self
-    {
-        if (!$this->fournisseur_marche->contains($fournisseurMarche)) {
-            $this->fournisseur_marche[] = $fournisseurMarche;
-            $fournisseurMarche->setFournisseur($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFournisseurMarche(marche $fournisseurMarche): self
-    {
-        if ($this->fournisseur_marche->removeElement($fournisseurMarche)) {
-            // set the owning side to null (unless already changed)
-            if ($fournisseurMarche->getFournisseur() === $this) {
-                $fournisseurMarche->setFournisseur(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getFournisseurUser(): ?user
-    {
-        return $this->fournisseur_user;
-    }
-
-    public function setFournisseurUser(?user $fournisseur_user): self
-    {
-        $this->fournisseur_user = $fournisseur_user;
 
         return $this;
     }

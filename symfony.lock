@@ -123,6 +123,27 @@
     "laminas/laminas-code": {
         "version": "4.5.1"
     },
+    "lcobucci/clock": {
+        "version": "2.0.0"
+    },
+    "lcobucci/jwt": {
+        "version": "4.1.5"
+    },
+    "lexik/jwt-authentication-bundle": {
+        "version": "2.15",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "2.5",
+            "ref": "5b2157bcd5778166a5696e42f552ad36529a07a6"
+        },
+        "files": [
+            "config/packages/lexik_jwt_authentication.yaml"
+        ]
+    },
+    "namshi/jose": {
+        "version": "7.2.3"
+    },
     "nelmio/cors-bundle": {
         "version": "2.2",
         "recipe": {
@@ -274,6 +295,12 @@
             "ref": "f8fd4ddb9b477510f8f4bce2b9c054ab428c0120"
         }
     },
+    "symfony/http-client": {
+        "version": "v5.4.8"
+    },
+    "symfony/http-client-contracts": {
+        "version": "v2.5.1"
+    },
     "symfony/http-foundation": {
         "version": "v5.4.6"
     },
@@ -324,6 +351,9 @@
     },
     "symfony/polyfill-mbstring": {
         "version": "v1.25.0"
+    },
+    "symfony/polyfill-php56": {
+        "version": "v1.20.0"
     },
     "symfony/polyfill-php73": {
         "version": "v1.25.0"

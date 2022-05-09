@@ -2,108 +2,99 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
-use ApiPlatform\Core\Annotation\ApiResource;
+use App\Entity\Traits\TimeStampableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\SerializedName;
+
 
 /**
- * @ApiResource(
- *     collectionOperations={"post","get"},
- *     itemOperations={"get", "put", "delete"}
- * )
- * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ApiResource(attributes={
+ *     "normalization_context"={"groups"={"read"}},
+ *     "denormalization_context"={"groups"={"write"}}
+ * })
  */
-class User
+class User implements UserInterface
 {
+    use TimeStampableTrait;
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @Groups("read")
      * @ORM\Column(type="integer")
+     *
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=30)
-     */
-    private $name;
-
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $image;
-
-    /**
-     * @ORM\Column(type="string", length=50, nullable=true)
+     * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups("read")
+     *
      */
     private $email;
 
     /**
-     * @ORM\Column(type="boolean", nullable=true)
+     * @ORM\Column(type="array")
      */
-    private $activer;
+    private $roles = ["Role_user"];
 
     /**
-     * @ORM\ManyToMany(targetEntity=Marche::class, mappedBy="relation")
+     * @var string The hashed password
+     * @Groups("write")
+     * @ORM\Column(type="string")
+     *
      */
-    private $marches;
+    private $password;
 
     /**
-     * @ORM\OneToMany(targetEntity=Fournisseur::class, mappedBy="fournisseur_user")
+     * @ORM\Column(type="string", length=255)
+     * @Groups("read")
      */
-    private $fournisseurs;
+    private $username;
 
     /**
-     * @ORM\OneToMany(targetEntity=marche::class, mappedBy="user")
+     * @SerializedName("password")
      */
-    private $user_marche;
+    private $plainPassword;
+    /**
+     * @ORM\Column(type="string", length=25, nullable=true)
+     * @Groups("read")
+     */
+    private $firstName;
 
     /**
-     * @ORM\OneToOne(targetEntity=situation::class, inversedBy="user", cascade={"persist", "remove"})
+     * @ORM\Column(type="string", length=25, nullable=true)
+     * @Groups("read")
      */
-    private $user_situation;
+    private $lastName;
 
     /**
-     * @ORM\ManyToOne(targetEntity=direct::class, inversedBy="users")
+     *
+     * @ORM\Column(type="boolean")
+     * @Groups("read")
      */
-    private $user_direct;
+    private $Active= false;
 
-    public function __construct()
-    {
-        $this->marches = new ArrayCollection();
-        $this->fournisseurs = new ArrayCollection();
-        $this->user_marche = new ArrayCollection();
-    }
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $token;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $image;
+
+
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(?string $image): self
-    {
-        $this->image = $image;
-
-        return $this;
     }
 
     public function getEmail(): ?string
@@ -111,108 +102,151 @@ class User
         return $this->email;
     }
 
-    public function setEmail(?string $email): self
+    public function setEmail(string $email): self
     {
         $this->email = $email;
-
         return $this;
     }
 
-    public function getActiver(): ?bool
+    public function getRoles(): ?array
     {
-        return $this->activer;
+        $roles = $this->roles;
+        return array_unique($roles);
     }
 
-    public function setActiver(?bool $activer): self
+    public function setRoles(array $roles): self
     {
-        $this->activer = $activer;
+        $this->roles = $roles;
+        return $this;
+    }
+
+    public function hasRoles(string $roles): bool
+    {
+        return in_array($roles, $this->roles);
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getPassword(): string
+    {
+        return (string)$this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
 
         return $this;
     }
 
     /**
-     * @return Collection<int, Fournisseur>
+     * @see UserInterface
      */
-    public function getFournisseurs(): Collection
+    public function getSalt()
     {
-        return $this->fournisseurs;
     }
 
-    public function addFournisseur(Fournisseur $fournisseur): self
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
     {
-        if (!$this->fournisseurs->contains($fournisseur)) {
-            $this->fournisseurs[] = $fournisseur;
-            $fournisseur->setFournisseurUser($this);
-        }
+        // If you store any temporary, sensitive data on the user, clear it here
+        $this->plainPassword = null;
+    }
+
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
 
         return $this;
     }
 
-    public function removeFournisseur(Fournisseur $fournisseur): self
+    public function getPlainPassword(): ?string
     {
-        if ($this->fournisseurs->removeElement($fournisseur)) {
-            // set the owning side to null (unless already changed)
-            if ($fournisseur->getFournisseurUser() === $this) {
-                $fournisseur->setFournisseurUser(null);
-            }
-        }
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
 
         return $this;
     }
 
     /**
-     * @return Collection<int, marche>
+     * @return mixed
      */
-    public function getUserMarche(): Collection
+    public function getFirstName()
     {
-        return $this->user_marche;
+        return $this->firstName;
     }
 
-    public function addUserMarche(marche $userMarche): self
+    /**
+     * @param mixed $firstname
+     */
+    public function setFirstName($firstName): void
     {
-        if (!$this->user_marche->contains($userMarche)) {
-            $this->user_marche[] = $userMarche;
-            $userMarche->setUser($this);
-        }
+        $this->firstName = $firstName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @param mixed $lastname
+     */
+    public function setLastName($lastName): void
+    {
+        $this->lastName = $lastName;
+    }
+
+    public function getActive(): ?bool
+    {
+        return $this->Active;
+    }
+
+    public function setActive(bool $Active): self
+    {
+        $this->Active = $Active;
 
         return $this;
     }
 
-    public function removeUserMarche(marche $userMarche): self
+    public function getToken(): ?string
     {
-        if ($this->user_marche->removeElement($userMarche)) {
-            // set the owning side to null (unless already changed)
-            if ($userMarche->getUser() === $this) {
-                $userMarche->setUser(null);
-            }
-        }
+        return $this->token;
+    }
+
+    public function setToken(?string $token): self
+    {
+        $this->token = $token;
 
         return $this;
     }
-
-    public function getUserSituation(): ?situation
+    /**
+     * @return mixed
+     */
+    public function getImage()
     {
-        return $this->user_situation;
+        return $this->image;
     }
-
-    public function setUserSituation(?situation $user_situation): self
+    /**
+     * @param mixed $image
+     */
+    public function setImage($image): void
     {
-        $this->user_situation = $user_situation;
-
-        return $this;
+        $this->image = $image;
     }
-
-    public function getUserDirect(): ?direct
-    {
-        return $this->user_direct;
-    }
-
-    public function setUserDirect(?direct $user_direct): self
-    {
-        $this->user_direct = $user_direct;
-
-        return $this;
-    }
-
-    
 }

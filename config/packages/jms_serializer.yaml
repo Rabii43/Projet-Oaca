@@ -2,6 +2,11 @@ jms_serializer:
     visitors:
         xml_serialization:
             format_output: '%kernel.debug%'
+    default_context:
+        serialization:
+            serialize_null: false
+            attributes:
+                allows_root_null: true
 #    metadata:
 #        auto_detection: false
 #        directories:
