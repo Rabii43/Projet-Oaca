@@ -1,42 +1,50 @@
-<?php
+<?php 
 
 namespace App\Event;
 
 use App\Entity\User;
+use App\Entity\Email;
 use Symfony\Contracts\EventDispatcher\Event;
 
+/**
+ * The user activated event is dispatched each time user activated
+ * in the system.
+ */
 class EmailEvent extends Event
 {
-    const USER = "user.create";
-    const EDITSTATUS = "folder.edit.status";
-    const RELAUNCHTIME = "relaunch.time.edit";
-    const RELAUNCHTIMEOUTDATED = "relaunch.time.outdated";
-    const USERFROMSOURCE = "user.create.fromSource";
-    const RELAUNCHFOLDER = "relaunch.folder";
-    /**
-     * @var $user
-     */
-    private $user;
+    // Listen when banker account was activated/desactivated 
+    public const USER_ACTIVATED = 'user.activated';
+    public const RESET_PASSWORD = 'user.reset_password';
+    public const USER = 'user.registration';
+    public const USERADMIN = 'admin.registration';
+    public const FOLDERFAVORITE = 'folder.favorite';
+    public const CREATEPROPOSALS = 'create.proposals';
+    public const UPDATEPROPOSALS = 'update.proposals';
+    public const USERUPDATE = 'update.user';
+    public const USERDELETE = 'delete.user';
 
-    /**
-     * @var $param
-     */
-    private $param;
+    protected $user;
 
-    public function __construct($user,$param)
+    protected $param;
+
+    public function __construct(User $user, Email $email, $param)
     {
         $this->user = $user;
+        $this->email = $email;
         $this->param = $param;
     }
 
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
 
-    public function getParam()
+    public function getEmail(): Email
+    {
+        return $this->email;
+    }
+    public function getParam( $param = null)
     {
         return $this->param;
     }
-
 }

@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Event\UsersEvent;
 use App\Form\UserType;
 //use App\Service\fileUploader;
+use App\Service\FileUploader;
 use App\Service\HeaderAuthGenerator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,6 +26,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  */
 class UserController extends MainController
 {
+
     /**
      * @Route("/users", name="get_all_users", methods={"GET"})
      */
@@ -74,7 +76,7 @@ class UserController extends MainController
     /**
      * @Route("/users/{id}", name="edit_user", methods={"POST","PUT"})
      */
-    public function edit(Request $request, $id, HeaderAuthGenerator $headerAuthGenerator, HttpClientInterface $client)
+    public function edit(Request $request, $id, HeaderAuthGenerator $headerAuthGenerator, FileUploader $fileUploader,HttpClientInterface $client)
     {
         $data = $this->jsonDecode($request);
         $user = $this->em->getRepository(User::class)->find($id);
@@ -89,10 +91,10 @@ class UserController extends MainController
         $roles = $request->request->get('roles');
         try {
             $this->update($request, UserType::class, $user, $data);
-//            $file = $fileUploader->upload($request);
-//            if ($file != null) {
-//                $user->setImage($file['image']);
-//            }
+            $file = $fileUploader->upload($request);
+            if ($file != null) {
+                $user->setImage($file['image']);
+            }
 
 //                $user->setRoles(array('ROLE_ADMIN','ROLE_USER'));
             if (isset($email)) {
@@ -155,21 +157,25 @@ class UserController extends MainController
 
             // Activate/Disactivate User (Banker)
             $user->getActive() ? $user->setActive(false) : $user->setActive(true);
-            $entityManager = $this->em;
+            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
 
             // Send Email
             $param = $user->getActive();
-            if ($param) {
+            if($param){
                 // Account activated
-                $emailUserActivatedTemplate = $this->emailRepo->findOneBy(['name' => 'user_activated']);
-            } else {
+                $emailUserActivatedTemplate =  $this->emailRepo->findOneBy(['name'=>'user_activated']);
+            }else{
                 // Account Desactivated
-                $emailUserActivatedTemplate = $this->emailRepo->findOneBy(['name' => 'user_desactivated']);
+                $emailUserActivatedTemplate =  $this->emailRepo->findOneBy(['name'=>'user_desactivated']);
             }
+            // Send email to user when account activated/desactivated
+            $emailEvent = new EmailEvent($user,$emailUserActivatedTemplate,$param);
+            $this->dispatsher->dispatch($emailEvent,EmailEvent::USER_ACTIVATED);
+
             // Create user in CC ficodev when user activated in fibourse
-            if ($param) {
+            if($param) {
                 $usersEvent = new UsersEvent($user, $this->getParameter('app_cc_register_endpoint'));
                 $this->dispatsher->dispatch($usersEvent, UsersEvent::USER_FICO_CREATED);
             }
