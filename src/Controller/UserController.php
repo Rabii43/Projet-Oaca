@@ -84,10 +84,6 @@ class UserController extends MainController
         $firstName = $request->request->get('firstName');
         $lastName = $request->request->get('lastName');
         $phone = $request->request->get('phone');
-        $address = $request->request->get('address');
-        $profession = $request->request->get('profession');
-        $reason = $request->request->get('reason');
-        $bank = $request->request->get('bank');
         $roles = $request->request->get('roles');
         try {
             $this->update($request, UserType::class, $user, $data);
@@ -108,18 +104,6 @@ class UserController extends MainController
             }
             if (isset($phone)) {
                 $user->setPhone($phone);
-            }
-            if (isset($address)) {
-                $user->setAddress($address);
-            }
-            if (isset($profession)) {
-                $user->setProfession($profession);
-            }
-            if (isset($reason)) {
-                $user->setReason($reason);
-            }
-            if (isset($bank)) {
-                $user->setBank($bank);
             }
             $this->em->persist($user);
             $this->em->flush();
@@ -153,7 +137,7 @@ class UserController extends MainController
         // Get Current user (Admin)
         $currentUser = $this->getUser();
 
-        if ($currentUser->hasRoles("ROLE_ADMIN")) {
+        if ($currentUser) {
 
             // Activate/Disactivate User (Banker)
             $user->getActive() ? $user->setActive(false) : $user->setActive(true);
@@ -163,22 +147,22 @@ class UserController extends MainController
 
             // Send Email
             $param = $user->getActive();
-            if($param){
-                // Account activated
-                $emailUserActivatedTemplate =  $this->emailRepo->findOneBy(['name'=>'user_activated']);
-            }else{
-                // Account Desactivated
-                $emailUserActivatedTemplate =  $this->emailRepo->findOneBy(['name'=>'user_desactivated']);
-            }
-            // Send email to user when account activated/desactivated
-            $emailEvent = new EmailEvent($user,$emailUserActivatedTemplate,$param);
-            $this->dispatsher->dispatch($emailEvent,EmailEvent::USER_ACTIVATED);
-
-            // Create user in CC ficodev when user activated in fibourse
-            if($param) {
-                $usersEvent = new UsersEvent($user, $this->getParameter('app_cc_register_endpoint'));
-                $this->dispatsher->dispatch($usersEvent, UsersEvent::USER_FICO_CREATED);
-            }
+//            if($param){
+//                // Account activated
+//                $emailUserActivatedTemplate =  $this->emailRepo->findOneBy(['name'=>'user_activated']);
+//            }else{
+//                // Account Desactivated
+//                $emailUserActivatedTemplate =  $this->emailRepo->findOneBy(['name'=>'user_desactivated']);
+//            }
+//            // Send email to user when account activated/desactivated
+//            $emailEvent = new EmailEvent($user,$emailUserActivatedTemplate,$param);
+//            $this->dispatsher->dispatch($emailEvent,EmailEvent::USER_ACTIVATED);
+//
+//            // Create user in CC ficodev when user activated in fibourse
+//            if($param) {
+//                $usersEvent = new UsersEvent($user, $this->getParameter('app_cc_register_endpoint'));
+//                $this->dispatsher->dispatch($usersEvent, UsersEvent::USER_FICO_CREATED);
+//            }
             return $this->successResponse($user);
         }
 

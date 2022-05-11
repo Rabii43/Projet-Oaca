@@ -2,7 +2,12 @@ security:
     encoders:
         App\Entity\User:
             algorithm: auto
-
+    password_hashers:
+        # this internal class is used by Symfony to represent in-memory users
+        # (the 'InMemoryUser' class was introduced in Symfony 5.3.
+        # In previous versions it was called 'User')
+        Symfony\Component\Security\Core\User\InMemoryUser: 'auto'
+        App\Entity\User: 'auto'
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
         # used to reload user from session & other features (e.g. switch_user)
@@ -43,6 +48,6 @@ security:
         - { path: ^/reset/*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/activateAccount, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-#        - { path: ^/token/refresh, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/token/refresh, roles: IS_AUTHENTICATED_ANONYMOUSLY }
        # - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/user, roles: [IS_AUTHENTICATED_FULLY, ROLE_ADMIN] }

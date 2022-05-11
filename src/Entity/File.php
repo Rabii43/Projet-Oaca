@@ -22,12 +22,6 @@ class File
      */
     private $name;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Proposals::class, inversedBy="files")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     */
-    private $proposals;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -45,16 +39,5 @@ class File
         return $this;
     }
 
-    public function getProposals(): ?Proposals
-    {
-        return $this->proposals;
-    }
-
-    public function setProposals(?Proposals $proposals): self
-    {
-        $this->proposals = $proposals;
-
-        return $this;
-    }
 
 }

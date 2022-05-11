@@ -97,7 +97,7 @@ class  AuthController extends MainController
         if (isset($user)) {
             $password = $data['password'];
             $user->setPassword($passwordHasher->hashPassword($user, $password));
-            $user->setActive(true);
+            $user->setActive(false);
             $this->em->persist($user);
             $this->em->flush();
         }
