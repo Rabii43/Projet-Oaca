@@ -18,11 +18,8 @@ class UserType extends AbstractType
             ->add('username')
             ->add('firstName')
             ->add('lastName')
-            ->add('Active')
             ->add('token')
             ->add('image')
-            ->add('createdAt')
-            ->add('updatedAt')
         ;
     }
 

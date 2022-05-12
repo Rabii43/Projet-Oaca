@@ -6,6 +6,7 @@ use ApiPlatform\Core\DataProvider\PaginatorInterface;
 use App\Entity\User;
 use App\Event\UsersEvent;
 use App\Form\UserType;
+
 //use App\Service\fileUploader;
 use App\Service\FileUploader;
 use App\Service\HeaderAuthGenerator;
@@ -35,7 +36,10 @@ class UserController extends MainController
         $lists = [];
         $datas = $this->em->getRepository(User::class)->findAll();
         foreach ($datas as $data) {
-            $lists[] = ["id" => $data->getId(), "email" => $data->getEmail(), "username" => $data->getUsername(), "firstname" => $data->getFirstname(), "lastname" => $data->getLastname(), "image" => $data->getImage(), "active" => $data->getActive()];
+            $lists[] = ["id" => $data->getId(), "email" => $data->getEmail(),
+                "username" => $data->getUsername(), "firstname" => $data->getFirstname(),
+                "lastname" => $data->getLastname(), "image" => $data->getImage(),
+                "active" => $data->getActive(), "roles" => $data->getRoles()];
         }
         return $this->successResponse($lists);
     }
@@ -46,10 +50,15 @@ class UserController extends MainController
     public function show($id)
     {
         $lists = [];
-        $user = $this->em->getRepository(User::class)->find($id);
+        $user = $this->em->getRepository(User::class)->findBy(["id"=>$id]);
         if (isset($user)) {
             foreach ($user as $data) {
-                $lists [] = ["id" => $data->getId(), "email" => $data->getEmail(), "firstname" => $data->getFirstname(), "lastname" => $data->getLastname(), "image" => $data->getImage(), "active" => $data->getActive()];
+                $lists [] = ["id" => $data->getId(),
+                    "email" => $data->getEmail(),
+                    "username" => $data->getUsername(), "firstname" => $data->getFirstname(),
+                    "lastname" => $data->getLastname(),
+                    "image" => $data->getImage(), "active" => $data->getActive(),
+                    "roles" => $data->getRoles()];
             }
             return $this->successResponse($lists);
         }
@@ -76,7 +85,7 @@ class UserController extends MainController
     /**
      * @Route("/users/{id}", name="edit_user", methods={"POST","PUT"})
      */
-    public function edit(Request $request, $id, HeaderAuthGenerator $headerAuthGenerator, FileUploader $fileUploader,HttpClientInterface $client)
+    public function edit(Request $request, $id, HeaderAuthGenerator $headerAuthGenerator, FileUploader $fileUploader, HttpClientInterface $client)
     {
         $data = $this->jsonDecode($request);
         $user = $this->em->getRepository(User::class)->find($id);
