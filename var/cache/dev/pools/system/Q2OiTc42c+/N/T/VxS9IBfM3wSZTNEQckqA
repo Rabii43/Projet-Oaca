@@ -1,0 +1,3 @@
+<?php //App%255CController%255CMainController%2523jsonDecode
+
+return [PHP_INT_MAX, []];

@@ -1,0 +1,19 @@
+<?php //App%255CEntity%255CUser%2524plainPassword
+
+return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
+    $o = [
+        clone (\Symfony\Component\VarExporter\Internal\Registry::$prototypes['Symfony\\Component\\Serializer\\Annotation\\SerializedName'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Serializer\\Annotation\\SerializedName')),
+    ],
+    null,
+    [
+        'Symfony\\Component\\Serializer\\Annotation\\SerializedName' => [
+            'serializedName' => [
+                'password',
+            ],
+        ],
+    ],
+    [
+        $o[0],
+    ],
+    []
+); }];

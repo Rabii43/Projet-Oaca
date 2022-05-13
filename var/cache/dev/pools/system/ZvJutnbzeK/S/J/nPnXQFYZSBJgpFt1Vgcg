@@ -1,0 +1,24 @@
+<?php //resource_name_collection
+
+return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
+    $o = [
+        clone (\Symfony\Component\VarExporter\Internal\Registry::$prototypes['ApiPlatform\\Core\\Metadata\\Resource\\ResourceNameCollection'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('ApiPlatform\\Core\\Metadata\\Resource\\ResourceNameCollection')),
+    ],
+    null,
+    [
+        'ApiPlatform\\Core\\Metadata\\Resource\\ResourceNameCollection' => [
+            'classes' => [
+                [
+                    'App\\Entity\\User',
+                    'App\\Entity\\Email',
+                    'App\\Entity\\Direct',
+                    'App\\Entity\\ConfigKeys',
+                    'App\\Entity\\Situation',
+                    'App\\Entity\\Marche',
+                ],
+            ],
+        ],
+    ],
+    $o[0],
+    []
+); }];

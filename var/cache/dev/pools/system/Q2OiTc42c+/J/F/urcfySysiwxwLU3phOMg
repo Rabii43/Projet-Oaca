@@ -1,0 +1,3 @@
+<?php //Gesdinet%255CJWTRefreshTokenBundle%255CEntity%255CAbstractRefreshToken
+
+return [PHP_INT_MAX, []];
