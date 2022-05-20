@@ -11,26 +11,28 @@
 
 namespace Gesdinet\JWTRefreshTokenBundle\DependencyInjection;
 
-use Doctrine\ODM\MongoDB\DocumentManager;
-use Doctrine\ORM\EntityManager;
-use Gesdinet\JWTRefreshTokenBundle\Document\RefreshToken as RefreshTokenDocument;
-use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken as RefreshTokenEntity;
-use Gesdinet\JWTRefreshTokenBundle\Request\Extractor\ExtractorInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
+/**
+ * This is the class that loads and manages your bundle configuration.
+ *
+ * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
+ */
 class GesdinetJWTRefreshTokenExtension extends Extension
 {
-    public function load(array $configs, ContainerBuilder $container): void
+    /**
+     * {@inheritdoc}
+     */
+    public function load(array $configs, ContainerBuilder $container)
     {
-        $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
 
         $loader = new Loader\PhpFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.php');
-
-        $container->registerForAutoconfiguration(ExtractorInterface::class)->addTag('gesdinet_jwt_refresh_token.request_extractor');
 
         $container->setParameter('gesdinet_jwt_refresh_token.ttl', $config['ttl']);
         $container->setParameter('gesdinet_jwt_refresh_token.ttl_update', $config['ttl_update']);
@@ -40,20 +42,14 @@ class GesdinetJWTRefreshTokenExtension extends Extension
         $container->setParameter('gesdinet_jwt_refresh_token.single_use', $config['single_use']);
         $container->setParameter('gesdinet_jwt_refresh_token.token_parameter_name', $config['token_parameter_name']);
         $container->setParameter('gesdinet_jwt_refresh_token.doctrine_mappings', $config['doctrine_mappings']);
-        $container->setParameter('gesdinet_jwt_refresh_token.cookie', $config['cookie'] ?? []);
-        $container->setParameter('gesdinet_jwt_refresh_token.logout_firewall_context', sprintf(
-            'security.firewall.map.context.%s',
-            $config['logout_firewall']
-        ));
-        $container->setParameter('gesdinet_jwt_refresh_token.return_expiration', $config['return_expiration']);
-        $container->setParameter('gesdinet_jwt_refresh_token.return_expiration_parameter_name', $config['return_expiration_parameter_name']);
 
-        $refreshTokenClass = RefreshTokenEntity::class;
+        $refreshTokenClass = 'Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken';
         $objectManager = 'doctrine.orm.entity_manager';
 
-        // Change the refresh token and object manager to the MongoDB ODM if the configuration explicitly sets it or if the ORM is not installed and the MongoDB ODM is
-        if ('mongodb' === strtolower($config['manager_type']) || (!class_exists(EntityManager::class) && class_exists(DocumentManager::class))) {
-            $refreshTokenClass = RefreshTokenDocument::class;
+        if (!class_exists('Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass')
+            || 'mongodb' === strtolower($config['manager_type'])
+        ) {
+            $refreshTokenClass = 'Gesdinet\JWTRefreshTokenBundle\Document\RefreshToken';
             $objectManager = 'doctrine_mongodb.odm.document_manager';
         }
 
@@ -71,11 +67,13 @@ class GesdinetJWTRefreshTokenExtension extends Extension
     }
 
     /**
-     * Get the refresh token class from configuration.
+     * Get refresh token class from configuration.
      *
-     * Falls back to deprecated configuration nodes if necessary.
+     * Supports deprecated configuration
+     *
+     * @return string|null
      */
-    protected function getRefreshTokenClass(array $config): ?string
+    protected function getRefreshTokenClass(array $config)
     {
         if (isset($config['refresh_token_class'])) {
             return $config['refresh_token_class'];
@@ -87,9 +85,11 @@ class GesdinetJWTRefreshTokenExtension extends Extension
     /**
      * Get object manager from configuration.
      *
-     * Falls back to deprecated configuration nodes if necessary.
+     * Supports deprecated configuration
+     *
+     * @return string|null
      */
-    protected function getObjectManager(array $config): ?string
+    protected function getObjectManager(array $config)
     {
         if (isset($config['object_manager'])) {
             return $config['object_manager'];

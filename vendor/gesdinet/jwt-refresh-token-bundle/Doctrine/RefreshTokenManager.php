@@ -11,12 +11,13 @@
 
 namespace Gesdinet\JWTRefreshTokenBundle\Doctrine;
 
+use DateTime;
 use Doctrine\Persistence\ObjectManager;
-use Gesdinet\JWTRefreshTokenBundle\Generator\RefreshTokenGeneratorInterface;
+use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshTokenRepository;
+use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManager as BaseRefreshTokenManager;
 use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenInterface;
-use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface;
 
-class RefreshTokenManager implements RefreshTokenManagerInterface
+class RefreshTokenManager extends BaseRefreshTokenManager
 {
     /**
      * @var ObjectManager
@@ -24,50 +25,26 @@ class RefreshTokenManager implements RefreshTokenManagerInterface
     protected $objectManager;
 
     /**
-     * @var class-string<RefreshTokenInterface>
+     * @var string
      */
     protected $class;
 
     /**
-     * @var RefreshTokenRepositoryInterface<RefreshTokenInterface>
+     * @var RefreshTokenRepository
      */
     protected $repository;
 
     /**
-     * @param class-string<RefreshTokenInterface> $class
+     * Constructor.
      *
-     * @throws \LogicException if the object repository does not implement `Gesdinet\JWTRefreshTokenBundle\Doctrine\RefreshTokenRepositoryInterface`
+     * @param string $class
      */
     public function __construct(ObjectManager $om, $class)
     {
         $this->objectManager = $om;
-
-        $repository = $om->getRepository($class);
-
-        if (!$repository instanceof RefreshTokenRepositoryInterface) {
-            throw new \LogicException(sprintf('Repository mapped for "%s" should implement %s.', $class, RefreshTokenRepositoryInterface::class));
-        }
-
-        $this->repository = $repository;
-
+        $this->repository = $om->getRepository($class);
         $metadata = $om->getClassMetadata($class);
         $this->class = $metadata->getName();
-    }
-
-    /**
-     * Creates an empty RefreshTokenInterface instance.
-     *
-     * @return RefreshTokenInterface
-     *
-     * @deprecated to be removed in 2.0, use a `Gesdinet\JWTRefreshTokenBundle\Generator\RefreshTokenGeneratorInterface` instead.
-     */
-    public function create()
-    {
-        trigger_deprecation('gesdinet/jwt-refresh-token-bundle', '1.0', '%s() is deprecated and will be removed in 2.0, use a "%s" instance to create new %s objects.', __METHOD__, RefreshTokenGeneratorInterface::class, RefreshTokenInterface::class);
-
-        $class = $this->getClass();
-
-        return new $class();
     }
 
     /**
@@ -83,7 +60,7 @@ class RefreshTokenManager implements RefreshTokenManagerInterface
     /**
      * @param string $username
      *
-     * @return RefreshTokenInterface|null
+     * @return RefreshTokenInterface
      */
     public function getLastFromUsername($username)
     {
@@ -91,9 +68,7 @@ class RefreshTokenManager implements RefreshTokenManagerInterface
     }
 
     /**
-     * @param bool $andFlush
-     *
-     * @return void
+     * @param bool|true $andFlush
      */
     public function save(RefreshTokenInterface $refreshToken, $andFlush = true)
     {
@@ -106,8 +81,6 @@ class RefreshTokenManager implements RefreshTokenManagerInterface
 
     /**
      * @param bool $andFlush
-     *
-     * @return void
      */
     public function delete(RefreshTokenInterface $refreshToken, $andFlush = true)
     {
@@ -119,8 +92,8 @@ class RefreshTokenManager implements RefreshTokenManagerInterface
     }
 
     /**
-     * @param \DateTimeInterface|null $datetime
-     * @param bool                    $andFlush
+     * @param DateTime $datetime
+     * @param bool     $andFlush
      *
      * @return RefreshTokenInterface[]
      */
@@ -142,7 +115,7 @@ class RefreshTokenManager implements RefreshTokenManagerInterface
     /**
      * Returns the RefreshToken fully qualified class name.
      *
-     * @return class-string<RefreshTokenInterface>
+     * @return string
      */
     public function getClass()
     {

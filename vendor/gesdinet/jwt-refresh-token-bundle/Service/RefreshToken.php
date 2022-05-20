@@ -13,9 +13,8 @@ namespace Gesdinet\JWTRefreshTokenBundle\Service;
 
 use Gesdinet\JWTRefreshTokenBundle\Event\RefreshEvent;
 use Gesdinet\JWTRefreshTokenBundle\Security\Authenticator\RefreshTokenAuthenticator;
-use Gesdinet\JWTRefreshTokenBundle\Exception\InvalidRefreshTokenException;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -24,32 +23,59 @@ use Gesdinet\JWTRefreshTokenBundle\Security\Provider\RefreshTokenProvider;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 
-trigger_deprecation('gesdinet/jwt-refresh-token-bundle', '1.0', 'The "%s" class is deprecated, use the `refresh_jwt` authenticator instead.', RefreshToken::class);
-
 /**
- * @deprecated use the `refresh_jwt` authenticator instead
+ * Class RefreshToken.
  */
 class RefreshToken
 {
-    private RefreshTokenAuthenticator $authenticator;
-
-    private RefreshTokenProvider $provider;
-
-    private AuthenticationSuccessHandlerInterface $successHandler;
-
-    private AuthenticationFailureHandlerInterface $failureHandler;
-
-    private RefreshTokenManagerInterface $refreshTokenManager;
-
-    private int $ttl;
-
-    private string $providerKey;
-
-    private bool $ttlUpdate;
-
-    private EventDispatcherInterface $eventDispatcher;
+    /**
+     * @var RefreshTokenAuthenticator
+     */
+    private $authenticator;
 
     /**
+     * @var RefreshTokenProvider
+     */
+    private $provider;
+
+    /**
+     * @var AuthenticationSuccessHandlerInterface
+     */
+    private $successHandler;
+
+    /**
+     * @var AuthenticationFailureHandlerInterface
+     */
+    private $failureHandler;
+
+    /**
+     * @var RefreshTokenManagerInterface
+     */
+    private $refreshTokenManager;
+
+    /**
+     * @var int
+     */
+    private $ttl;
+
+    /**
+     * @var string
+     */
+    private $providerKey;
+
+    /**
+     * @var bool
+     */
+    private $ttlUpdate;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
+     * RefreshToken constructor.
+     *
      * @param int    $ttl
      * @param string $providerKey
      * @param bool   $ttlUpdate
@@ -77,30 +103,34 @@ class RefreshToken
     }
 
     /**
-     * @return Response
+     * Refresh token.
+     *
+     * @return mixed
      *
      * @throws InvalidArgumentException
      * @throws AuthenticationException
      */
     public function refresh(Request $request)
     {
-        $credentials = $this->authenticator->getCredentials($request);
-
         try {
-            $user = $this->authenticator->getUser($credentials, $this->provider);
+            $user = $this->authenticator->getUser(
+                $this->authenticator->getCredentials($request),
+                $this->provider
+            );
 
             $postAuthenticationToken = $this->authenticator->createAuthenticatedToken($user, $this->providerKey);
         } catch (AuthenticationException $e) {
             return $this->failureHandler->onAuthenticationFailure($request, $e);
         }
 
+        $credentials = $this->authenticator->getCredentials($request);
         $refreshToken = $this->refreshTokenManager->get($credentials['token']);
 
         if (null === $refreshToken || !$refreshToken->isValid()) {
             return $this->failureHandler->onAuthenticationFailure(
                 $request,
-                new InvalidRefreshTokenException(
-                    sprintf('Refresh token "%s" is invalid.', (string) $refreshToken)
+                new AuthenticationException(
+                    sprintf('Refresh token "%s" is invalid.', $refreshToken)
                 )
             );
         }
@@ -113,9 +143,11 @@ class RefreshToken
             $this->refreshTokenManager->save($refreshToken);
         }
 
-        $event = new RefreshEvent($refreshToken, $postAuthenticationToken);
-
-        $this->eventDispatcher->dispatch($event, 'gesdinet.refresh_token');
+        if ($this->eventDispatcher instanceof ContractsEventDispatcherInterface) {
+            $this->eventDispatcher->dispatch(new RefreshEvent($refreshToken, $postAuthenticationToken), 'gesdinet.refresh_token');
+        } else {
+            $this->eventDispatcher->dispatch('gesdinet.refresh_token', new RefreshEvent($refreshToken, $postAuthenticationToken));
+        }
 
         return $this->successHandler->onAuthenticationSuccess($request, $postAuthenticationToken);
     }

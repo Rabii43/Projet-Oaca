@@ -16,13 +16,15 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
+/**
+ * Class ClearInvalidRefreshTokensCommand.
+ */
 class RevokeRefreshTokenCommand extends Command
 {
     protected static $defaultName = 'gesdinet:jwt:revoke';
 
-    private RefreshTokenManagerInterface $refreshTokenManager;
+    private $refreshTokenManager;
 
     public function __construct(RefreshTokenManagerInterface $refreshTokenManager)
     {
@@ -31,31 +33,34 @@ class RevokeRefreshTokenCommand extends Command
         $this->refreshTokenManager = $refreshTokenManager;
     }
 
-    protected function configure(): void
+    /**
+     * @see Command
+     */
+    protected function configure()
     {
         $this
             ->setDescription('Revoke a refresh token')
             ->addArgument('refresh_token', InputArgument::REQUIRED, 'The refresh token to revoke');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    /**
+     * @see Command
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $io = new SymfonyStyle($input, $output);
-
-        /** @var string $refreshTokenParam */
         $refreshTokenParam = $input->getArgument('refresh_token');
 
         $refreshToken = $this->refreshTokenManager->get($refreshTokenParam);
 
         if (null === $refreshToken) {
-            $io->error(sprintf('Refresh token "%s" does not exist', $refreshTokenParam));
+            $output->writeln(sprintf('<error>Not Found:</error> Refresh Token <comment>%s</comment> doesn\'t exists', $refreshTokenParam));
 
-            return 1;
+            return -1;
         }
 
         $this->refreshTokenManager->delete($refreshToken);
 
-        $io->success(sprintf('Revoked refresh token "%s"', $refreshTokenParam));
+        $output->writeln(sprintf('Revoke <comment>%s</comment>', $refreshToken->getRefreshToken()));
 
         return 0;
     }

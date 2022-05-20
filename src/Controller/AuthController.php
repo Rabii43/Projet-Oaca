@@ -29,7 +29,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class  AuthController extends MainController
 {
     /**
-     * @Route("/register", name="api_register")
+     * @Route("/register", name="api_register",methods={"POST"})
      * @param Request $request
      * @param UserPasswordEncoderInterface $encoder
      * @return Response

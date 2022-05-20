@@ -11,19 +11,20 @@
 
 namespace Gesdinet\JWTRefreshTokenBundle\Command;
 
-use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenInterface;
 use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
+/**
+ * Class ClearInvalidRefreshTokensCommand.
+ */
 class ClearInvalidRefreshTokensCommand extends Command
 {
     protected static $defaultName = 'gesdinet:jwt:clear';
 
-    private RefreshTokenManagerInterface $refreshTokenManager;
+    private $refreshTokenManager;
 
     public function __construct(RefreshTokenManagerInterface $refreshTokenManager)
     {
@@ -32,18 +33,21 @@ class ClearInvalidRefreshTokensCommand extends Command
         $this->refreshTokenManager = $refreshTokenManager;
     }
 
-    protected function configure(): void
+    /**
+     * @see Command
+     */
+    protected function configure()
     {
         $this
             ->setDescription('Clear invalid refresh tokens.')
-            ->addArgument('datetime', InputArgument::OPTIONAL, 'An optional date, all tokens before this date will be removed; the value should be able to be parsed by DateTime.');
+            ->addArgument('datetime', InputArgument::OPTIONAL);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    /**
+     * @see Command
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $io = new SymfonyStyle($input, $output);
-
-        /** @var string|null $datetime */
         $datetime = $input->getArgument('datetime');
 
         if (null === $datetime) {
@@ -54,14 +58,8 @@ class ClearInvalidRefreshTokensCommand extends Command
 
         $revokedTokens = $this->refreshTokenManager->revokeAllInvalid($datetime);
 
-        if (0 === count($revokedTokens)) {
-            $io->info('There were no invalid tokens to revoke.');
-        } else {
-            $io->text(sprintf('Revoked %d invalid token(s)', count($revokedTokens)));
-            $io->listing(array_map(
-                static fn (RefreshTokenInterface $revokedToken): string => $revokedToken->getRefreshToken(),
-                $revokedTokens,
-            ));
+        foreach ($revokedTokens as $revokedToken) {
+            $output->writeln(sprintf('Revoke <comment>%s</comment>', $revokedToken->getRefreshToken()));
         }
 
         return 0;

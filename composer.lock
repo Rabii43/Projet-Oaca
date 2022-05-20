@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c0311459eb466e78b1ed008be726926a",
+    "content-hash": "f2e86f6b81ed1828a179013517a28954",
     "packages": [
         {
             "name": "api-platform/core",
@@ -610,25 +610,25 @@
         },
         {
             "name": "doctrine/deprecations",
-            "version": "v0.5.3",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/deprecations.git",
-                "reference": "9504165960a1f83cc1480e2be1dd0a0478561314"
+                "reference": "0e2a4f1f8cdfc7a92ec3b01c9334898c806b30de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/deprecations/zipball/9504165960a1f83cc1480e2be1dd0a0478561314",
-                "reference": "9504165960a1f83cc1480e2be1dd0a0478561314",
+                "url": "https://api.github.com/repos/doctrine/deprecations/zipball/0e2a4f1f8cdfc7a92ec3b01c9334898c806b30de",
+                "reference": "0e2a4f1f8cdfc7a92ec3b01c9334898c806b30de",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.1|^8.0"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^6.0|^7.0|^8.0",
-                "phpunit/phpunit": "^7.0|^8.0|^9.0",
-                "psr/log": "^1.0"
+                "doctrine/coding-standard": "^9",
+                "phpunit/phpunit": "^7.5|^8.5|^9.5",
+                "psr/log": "^1|^2|^3"
             },
             "suggest": {
                 "psr/log": "Allows logging deprecations via PSR-3 logger implementation"
@@ -647,9 +647,9 @@
             "homepage": "https://www.doctrine-project.org/",
             "support": {
                 "issues": "https://github.com/doctrine/deprecations/issues",
-                "source": "https://github.com/doctrine/deprecations/tree/v0.5.3"
+                "source": "https://github.com/doctrine/deprecations/tree/v1.0.0"
             },
-            "time": "2021-03-21T12:59:47+00:00"
+            "time": "2022-05-02T15:47:09+00:00"
         },
         {
             "name": "doctrine/doctrine-bundle",
@@ -1183,22 +1183,22 @@
         },
         {
             "name": "doctrine/migrations",
-            "version": "3.5.0",
+            "version": "3.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "5713b45c933122e509d9b31c767b420c3dfed399"
+                "reference": "c0a01ddead0ccaf0282f3f4fcaa026d11918a481"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/5713b45c933122e509d9b31c767b420c3dfed399",
-                "reference": "5713b45c933122e509d9b31c767b420c3dfed399",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/c0a01ddead0ccaf0282f3f4fcaa026d11918a481",
+                "reference": "c0a01ddead0ccaf0282f3f4fcaa026d11918a481",
                 "shasum": ""
             },
             "require": {
                 "composer-runtime-api": "^2",
                 "doctrine/dbal": "^3.3",
-                "doctrine/deprecations": "^0.5.3",
+                "doctrine/deprecations": "^0.5.3 || ^1",
                 "doctrine/event-manager": "^1.0",
                 "friendsofphp/proxy-manager-lts": "^1.0",
                 "php": "^7.4 || ^8.0",
@@ -1206,10 +1206,13 @@
                 "symfony/console": "^4.4.16 || ^5.4 || ^6.0",
                 "symfony/stopwatch": "^4.4 || ^5.4 || ^6.0"
             },
+            "conflict": {
+                "doctrine/orm": "<2.12"
+            },
             "require-dev": {
                 "doctrine/coding-standard": "^9",
-                "doctrine/orm": "^2.6",
-                "doctrine/persistence": "^2.0",
+                "doctrine/orm": "^2.12",
+                "doctrine/persistence": "^2 || ^3",
                 "doctrine/sql-formatter": "^1.0",
                 "ergebnis/composer-normalize": "^2.9",
                 "ext-pdo_sqlite": "*",
@@ -1218,7 +1221,7 @@
                 "phpstan/phpstan-phpunit": "^1.1",
                 "phpstan/phpstan-strict-rules": "^1.1",
                 "phpstan/phpstan-symfony": "^1.1",
-                "phpunit/phpunit": "^9.4",
+                "phpunit/phpunit": "^9.5",
                 "symfony/cache": "^4.4 || ^5.4 || ^6.0",
                 "symfony/process": "^4.4 || ^5.4 || ^6.0",
                 "symfony/yaml": "^4.4 || ^5.4 || ^6.0"
@@ -1269,7 +1272,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/migrations/issues",
-                "source": "https://github.com/doctrine/migrations/tree/3.5.0"
+                "source": "https://github.com/doctrine/migrations/tree/3.5.1"
             },
             "funding": [
                 {
@@ -1285,7 +1288,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-04-04T20:24:11+00:00"
+            "time": "2022-05-09T20:24:38+00:00"
         },
         {
             "name": "doctrine/orm",
@@ -1752,63 +1755,40 @@
         },
         {
             "name": "gesdinet/jwt-refresh-token-bundle",
-            "version": "v1.1.1",
+            "version": "v0.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/markitosgv/JWTRefreshTokenBundle.git",
-                "reference": "8970ae1a602fb74e434964d03c969d883cfed376"
+                "reference": "4a7109df39b84b5bc41e6ee16da8cdcb9e0093fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/markitosgv/JWTRefreshTokenBundle/zipball/8970ae1a602fb74e434964d03c969d883cfed376",
-                "reference": "8970ae1a602fb74e434964d03c969d883cfed376",
+                "url": "https://api.github.com/repos/markitosgv/JWTRefreshTokenBundle/zipball/4a7109df39b84b5bc41e6ee16da8cdcb9e0093fb",
+                "reference": "4a7109df39b84b5bc41e6ee16da8cdcb9e0093fb",
                 "shasum": ""
             },
             "require": {
-                "lexik/jwt-authentication-bundle": "^2.0",
-                "php": ">=7.4",
-                "symfony/config": "^4.4|^5.4|^6.0",
-                "symfony/console": "^4.4|^5.4|^6.0",
-                "symfony/dependency-injection": "^4.4|^5.4|^6.0",
-                "symfony/deprecation-contracts": "^2.1|^3.0",
-                "symfony/event-dispatcher": "^4.4|^5.4|^6.0",
-                "symfony/http-foundation": "^4.4|^5.4|^6.0",
-                "symfony/http-kernel": "^4.4|^5.4|^6.0",
-                "symfony/polyfill-php80": "^1.15",
-                "symfony/property-access": "^4.4|^5.4|^6.0",
-                "symfony/security-bundle": "^4.4|^5.4|^6.0",
-                "symfony/security-core": "^4.4|^5.4|^6.0",
-                "symfony/security-http": "^4.4|^5.4|^6.0"
-            },
-            "conflict": {
-                "doctrine/mongodb-odm": "<2.0",
-                "doctrine/orm": "<2.7",
-                "doctrine/persistence": "<1.3.3"
+                "lexik/jwt-authentication-bundle": "^1.1|^2.0@dev",
+                "php": "^5.5.9|>=7.0.8",
+                "symfony/framework-bundle": "~3.4|~4.0|~5.0",
+                "symfony/validator": "~3.4|~4.0|~5.0"
             },
             "require-dev": {
-                "doctrine/cache": "^1.11|^2.0",
-                "doctrine/mongodb-odm": "^2.0",
-                "doctrine/orm": "^2.7",
-                "doctrine/persistence": "^1.3.3|^2.0",
-                "matthiasnoback/symfony-config-test": "^4.2",
-                "matthiasnoback/symfony-dependency-injection-test": "^4.2",
-                "phpunit/phpunit": "^9.5",
-                "symfony/cache": "^4.4|^5.4|^6.0",
-                "symfony/security-guard": "^4.4|^5.4"
+                "doctrine/doctrine-bundle": "~1.4|~2.0",
+                "doctrine/mongodb-odm-bundle": "^3.4|^4.0",
+                "doctrine/orm": "^2.4.8",
+                "phpspec/phpspec": "^3.0|^4.0|^5.0|^6.0"
             },
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.x-dev"
+                    "dev-master": "1.0-dev"
                 }
             },
             "autoload": {
                 "psr-4": {
                     "Gesdinet\\JWTRefreshTokenBundle\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1826,9 +1806,9 @@
             ],
             "support": {
                 "issues": "https://github.com/markitosgv/JWTRefreshTokenBundle/issues",
-                "source": "https://github.com/markitosgv/JWTRefreshTokenBundle/tree/v1.1.1"
+                "source": "https://github.com/markitosgv/JWTRefreshTokenBundle/tree/v0.12.0"
             },
-            "time": "2022-04-11T14:46:00+00:00"
+            "time": "2021-04-23T16:47:20+00:00"
         },
         {
             "name": "jms/metadata",
@@ -7902,16 +7882,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v3.3.10",
+            "version": "v3.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "8442df056c51b706793adf80a9fd363406dd3674"
+                "reference": "e939eae92386b69b49cfa4599dd9bead6bf4a342"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/8442df056c51b706793adf80a9fd363406dd3674",
-                "reference": "8442df056c51b706793adf80a9fd363406dd3674",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/e939eae92386b69b49cfa4599dd9bead6bf4a342",
+                "reference": "e939eae92386b69b49cfa4599dd9bead6bf4a342",
                 "shasum": ""
             },
             "require": {
@@ -7926,7 +7906,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.3-dev"
+                    "dev-master": "3.4-dev"
                 }
             },
             "autoload": {
@@ -7962,7 +7942,7 @@
             ],
             "support": {
                 "issues": "https://github.com/twigphp/Twig/issues",
-                "source": "https://github.com/twigphp/Twig/tree/v3.3.10"
+                "source": "https://github.com/twigphp/Twig/tree/v3.4.1"
             },
             "funding": [
                 {
@@ -7974,7 +7954,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-04-06T06:47:41+00:00"
+            "time": "2022-05-17T05:48:52+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -8150,16 +8130,16 @@
         },
         {
             "name": "symfony/maker-bundle",
-            "version": "v1.41.0",
+            "version": "v1.43.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/maker-bundle.git",
-                "reference": "4b994dfdd0196dcb3d333fdd6a1d72d5955a9532"
+                "reference": "e3f9a1d9e0f4968f68454403e820dffc7db38a59"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/4b994dfdd0196dcb3d333fdd6a1d72d5955a9532",
-                "reference": "4b994dfdd0196dcb3d333fdd6a1d72d5955a9532",
+                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/e3f9a1d9e0f4968f68454403e820dffc7db38a59",
+                "reference": "e3f9a1d9e0f4968f68454403e820dffc7db38a59",
                 "shasum": ""
             },
             "require": {
@@ -8221,7 +8201,7 @@
             ],
             "support": {
                 "issues": "https://github.com/symfony/maker-bundle/issues",
-                "source": "https://github.com/symfony/maker-bundle/tree/v1.41.0"
+                "source": "https://github.com/symfony/maker-bundle/tree/v1.43.0"
             },
             "funding": [
                 {
@@ -8237,7 +8217,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-04T16:32:52+00:00"
+            "time": "2022-05-17T15:46:50+00:00"
         }
     ],
     "aliases": [],

@@ -11,14 +11,14 @@
 
 namespace Gesdinet\JWTRefreshTokenBundle\EventListener;
 
-use Gesdinet\JWTRefreshTokenBundle\Generator\RefreshTokenGeneratorInterface;
 use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenInterface;
 use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface;
-use Gesdinet\JWTRefreshTokenBundle\Request\Extractor\ExtractorInterface;
+use Gesdinet\JWTRefreshTokenBundle\Request\RequestRefreshToken;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class AttachRefreshTokenOnSuccessListener
 {
@@ -33,9 +33,19 @@ class AttachRefreshTokenOnSuccessListener
     protected $ttl;
 
     /**
+     * @var ValidatorInterface
+     */
+    protected $validator;
+
+    /**
      * @var RequestStack
      */
     protected $requestStack;
+
+    /**
+     * @var string
+     */
+    protected $userIdentityField;
 
     /**
      * @var string
@@ -48,77 +58,43 @@ class AttachRefreshTokenOnSuccessListener
     protected $singleUse;
 
     /**
-     * @var RefreshTokenGeneratorInterface
-     */
-    protected $refreshTokenGenerator;
-
-    /**
-     * @var ExtractorInterface
-     */
-    protected $extractor;
-
-    protected array $cookieSettings;
-
-    protected bool $returnExpiration;
-
-    protected string $returnExpirationParameterName;
-
-    /**
+     * AttachRefreshTokenOnSuccessListener constructor.
+     *
      * @param int    $ttl
+     * @param string $userIdentityField
      * @param string $tokenParameterName
      * @param bool   $singleUse
      */
     public function __construct(
         RefreshTokenManagerInterface $refreshTokenManager,
         $ttl,
+        ValidatorInterface $validator,
         RequestStack $requestStack,
+        $userIdentityField,
         $tokenParameterName,
-        $singleUse,
-        RefreshTokenGeneratorInterface $refreshTokenGenerator,
-        ExtractorInterface $extractor,
-        array $cookieSettings,
-        bool $returnExpiration = false,
-        string $returnExpirationParameterName = 'refresh_token_expiration'
+        $singleUse
     ) {
         $this->refreshTokenManager = $refreshTokenManager;
         $this->ttl = $ttl;
+        $this->validator = $validator;
         $this->requestStack = $requestStack;
+        $this->userIdentityField = $userIdentityField;
         $this->tokenParameterName = $tokenParameterName;
         $this->singleUse = $singleUse;
-        $this->refreshTokenGenerator = $refreshTokenGenerator;
-        $this->extractor = $extractor;
-        $this->cookieSettings = array_merge([
-            'enabled' => false,
-            'same_site' => 'lax',
-            'path' => '/',
-            'domain' => null,
-            'http_only' => true,
-            'secure' => true,
-            'remove_token_from_body' => true,
-        ], $cookieSettings);
-        $this->returnExpiration = $returnExpiration;
-        $this->returnExpirationParameterName = $returnExpirationParameterName;
     }
 
-    public function attachRefreshToken(AuthenticationSuccessEvent $event): void
+    public function attachRefreshToken(AuthenticationSuccessEvent $event)
     {
+        $data = $event->getData();
         $user = $event->getUser();
+        $request = $this->requestStack->getCurrentRequest();
 
         if (!$user instanceof UserInterface) {
             return;
         }
 
-        $data = $event->getData();
-        $request = $this->requestStack->getCurrentRequest();
+        $refreshTokenString = RequestRefreshToken::getRefreshToken($request, $this->tokenParameterName);
 
-        if (null === $request) {
-            return;
-        }
-
-        // Extract refreshToken from the request
-        $refreshTokenString = $this->extractor->getRefreshToken($request, $this->tokenParameterName);
-
-        // Remove the current refreshToken if it is single-use
         if ($refreshTokenString && true === $this->singleUse) {
             $refreshToken = $this->refreshTokenManager->get($refreshTokenString);
             $refreshTokenString = null;
@@ -128,44 +104,39 @@ class AttachRefreshTokenOnSuccessListener
             }
         }
 
-        // Set or create the refreshTokenString
         if ($refreshTokenString) {
             $data[$this->tokenParameterName] = $refreshTokenString;
         } else {
-            $refreshToken = $this->refreshTokenGenerator->createForUserWithTtl($user, $this->ttl);
+            $datetime = new \DateTime();
+            $datetime->modify('+'.$this->ttl.' seconds');
+
+            $refreshToken = $this->refreshTokenManager->create();
+
+            $accessor = new PropertyAccessor();
+            $userIdentityFieldValue = $accessor->getValue($user, $this->userIdentityField);
+
+            $refreshToken->setUsername($userIdentityFieldValue);
+            $refreshToken->setRefreshToken();
+            $refreshToken->setValid($datetime);
+
+            $valid = false;
+            while (false === $valid) {
+                $valid = true;
+                $errors = $this->validator->validate($refreshToken);
+                if ($errors->count() > 0) {
+                    foreach ($errors as $error) {
+                        if ('refreshToken' === $error->getPropertyPath()) {
+                            $valid = false;
+                            $refreshToken->setRefreshToken();
+                        }
+                    }
+                }
+            }
 
             $this->refreshTokenManager->save($refreshToken);
-            $refreshTokenString = $refreshToken->getRefreshToken();
-            $data[$this->tokenParameterName] = $refreshTokenString;
+            $data[$this->tokenParameterName] = $refreshToken->getRefreshToken();
         }
 
-        if ($this->returnExpiration) {
-            $data[$this->returnExpirationParameterName] = time() + $this->ttl;
-        }
-
-        // Add a response cookie if enabled
-        if ($this->cookieSettings['enabled']) {
-            $event->getResponse()->headers->setCookie(
-                new Cookie(
-                    $this->tokenParameterName,
-                    $refreshTokenString,
-                    time() + $this->ttl,
-                    $this->cookieSettings['path'],
-                    $this->cookieSettings['domain'],
-                    $this->cookieSettings['secure'],
-                    $this->cookieSettings['http_only'],
-                    false,
-                    $this->cookieSettings['same_site']
-                )
-            );
-
-            // Remove the refreshTokenString from the response body
-            if (isset($this->cookieSettings['remove_token_from_body']) && $this->cookieSettings['remove_token_from_body']) {
-                unset($data[$this->tokenParameterName]);
-            }
-        }
-
-        // Set response data
         $event->setData($data);
     }
 }

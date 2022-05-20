@@ -5,11 +5,16 @@ namespace Gesdinet\JWTRefreshTokenBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
+/**
+ * ObjectManagerCompilerPass.
+ */
 final class ObjectManagerCompilerPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container): void
+    /**
+     * {@inheritdoc}
+     */
+    public function process(ContainerBuilder $container)
     {
-        /** @var string|null $objectManagerId */
         $objectManagerId = $container->getParameter('gesdinet.jwtrefreshtoken.object_manager.id');
         if (!$objectManagerId) {
             return;

@@ -514,34 +514,26 @@ return [[
 '[C]App%5CEntity%5CMarche%24NBTSup' => 1,
 'App%5CEntity%5CRefreshToken' => 32,
 '[C]App%5CEntity%5CRefreshToken' => 1,
-'Gesdinet%5CJWTRefreshTokenBundle%5CModel%5CAbstractRefreshToken%23createForUserWithTtl' => 0,
-'[C]Gesdinet%5CJWTRefreshTokenBundle%5CModel%5CAbstractRefreshToken%23createForUserWithTtl' => 1,
-'Gesdinet%5CJWTRefreshTokenBundle%5CModel%5CAbstractRefreshToken%23__toString' => 0,
-'[C]Gesdinet%5CJWTRefreshTokenBundle%5CModel%5CAbstractRefreshToken%23__toString' => 1,
-'Gesdinet%5CJWTRefreshTokenBundle%5CModel%5CAbstractRefreshToken%23getId' => 0,
-'[C]Gesdinet%5CJWTRefreshTokenBundle%5CModel%5CAbstractRefreshToken%23getId' => 1,
-'Gesdinet%5CJWTRefreshTokenBundle%5CModel%5CAbstractRefreshToken%23setRefreshToken' => 0,
-'[C]Gesdinet%5CJWTRefreshTokenBundle%5CModel%5CAbstractRefreshToken%23setRefreshToken' => 1,
-'Gesdinet%5CJWTRefreshTokenBundle%5CModel%5CAbstractRefreshToken%23getRefreshToken' => 0,
-'[C]Gesdinet%5CJWTRefreshTokenBundle%5CModel%5CAbstractRefreshToken%23getRefreshToken' => 1,
-'Gesdinet%5CJWTRefreshTokenBundle%5CModel%5CAbstractRefreshToken%23setValid' => 0,
-'[C]Gesdinet%5CJWTRefreshTokenBundle%5CModel%5CAbstractRefreshToken%23setValid' => 1,
-'Gesdinet%5CJWTRefreshTokenBundle%5CModel%5CAbstractRefreshToken%23getValid' => 0,
-'[C]Gesdinet%5CJWTRefreshTokenBundle%5CModel%5CAbstractRefreshToken%23getValid' => 1,
-'Gesdinet%5CJWTRefreshTokenBundle%5CModel%5CAbstractRefreshToken%23setUsername' => 0,
-'[C]Gesdinet%5CJWTRefreshTokenBundle%5CModel%5CAbstractRefreshToken%23setUsername' => 1,
-'Gesdinet%5CJWTRefreshTokenBundle%5CModel%5CAbstractRefreshToken%23getUsername' => 0,
-'[C]Gesdinet%5CJWTRefreshTokenBundle%5CModel%5CAbstractRefreshToken%23getUsername' => 1,
-'Gesdinet%5CJWTRefreshTokenBundle%5CModel%5CAbstractRefreshToken%23isValid' => 0,
-'[C]Gesdinet%5CJWTRefreshTokenBundle%5CModel%5CAbstractRefreshToken%23isValid' => 1,
-'Gesdinet%5CJWTRefreshTokenBundle%5CModel%5CAbstractRefreshToken%24id' => 0,
-'[C]Gesdinet%5CJWTRefreshTokenBundle%5CModel%5CAbstractRefreshToken%24id' => 1,
-'Gesdinet%5CJWTRefreshTokenBundle%5CModel%5CAbstractRefreshToken%24refreshToken' => 0,
-'[C]Gesdinet%5CJWTRefreshTokenBundle%5CModel%5CAbstractRefreshToken%24refreshToken' => 1,
-'Gesdinet%5CJWTRefreshTokenBundle%5CModel%5CAbstractRefreshToken%24username' => 0,
-'[C]Gesdinet%5CJWTRefreshTokenBundle%5CModel%5CAbstractRefreshToken%24username' => 1,
-'Gesdinet%5CJWTRefreshTokenBundle%5CModel%5CAbstractRefreshToken%24valid' => 0,
-'[C]Gesdinet%5CJWTRefreshTokenBundle%5CModel%5CAbstractRefreshToken%24valid' => 1,
+'Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CRefreshToken%23getId' => 0,
+'[C]Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CRefreshToken%23getId' => 1,
+'Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CAbstractRefreshToken%23setRefreshToken' => 0,
+'[C]Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CAbstractRefreshToken%23setRefreshToken' => 1,
+'Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CAbstractRefreshToken%23getRefreshToken' => 0,
+'[C]Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CAbstractRefreshToken%23getRefreshToken' => 1,
+'Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CAbstractRefreshToken%23setValid' => 0,
+'[C]Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CAbstractRefreshToken%23setValid' => 1,
+'Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CAbstractRefreshToken%23getValid' => 0,
+'[C]Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CAbstractRefreshToken%23getValid' => 1,
+'Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CAbstractRefreshToken%23setUsername' => 0,
+'[C]Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CAbstractRefreshToken%23setUsername' => 1,
+'Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CAbstractRefreshToken%23getUsername' => 0,
+'[C]Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CAbstractRefreshToken%23getUsername' => 1,
+'Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CAbstractRefreshToken%23isValid' => 0,
+'[C]Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CAbstractRefreshToken%23isValid' => 1,
+'Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CAbstractRefreshToken%23__toString' => 0,
+'[C]Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CAbstractRefreshToken%23__toString' => 1,
+'Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CRefreshToken%24id' => 0,
+'[C]Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CRefreshToken%24id' => 1,
 'App%5CEntity%5CSituation' => 33,
 '[C]App%5CEntity%5CSituation' => 1,
 'App%5CEntity%5CSituation%23getId' => 0,
@@ -1090,7 +1082,15 @@ return [[
 '[C]Doctrine%5CORM%5CPersisters%5CEntity%5CSingleTablePersister%23getSQLResultCasing' => 1,
 'Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CAbstractRefreshToken' => 0,
 '[C]Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CAbstractRefreshToken' => 1,
-'Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CRefreshToken' => 0,
+'Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CAbstractRefreshToken%23getId' => 0,
+'[C]Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CAbstractRefreshToken%23getId' => 1,
+'Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CAbstractRefreshToken%24refreshToken' => 46,
+'[C]Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CAbstractRefreshToken%24refreshToken' => 1,
+'Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CAbstractRefreshToken%24username' => 46,
+'[C]Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CAbstractRefreshToken%24username' => 1,
+'Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CAbstractRefreshToken%24valid' => 46,
+'[C]Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CAbstractRefreshToken%24valid' => 1,
+'Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CRefreshToken' => 47,
 '[C]Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CRefreshToken' => 1,
 'Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CRefreshTokenRepository' => 0,
 '[C]Gesdinet%5CJWTRefreshTokenBundle%5CEntity%5CRefreshTokenRepository' => 1,
@@ -1178,7 +1178,7 @@ return [[
 ], [
 
 0 => [],
-1 => 1652330618,
+1 => 1652879348,
 2 => static function () {
     return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
         $o = [
@@ -1192,6 +1192,11 @@ return [[
                 ],
                 'name' => [
                     'api_register',
+                ],
+                'methods' => [
+                    [
+                        'POST',
+                    ],
                 ],
             ],
         ],
@@ -2348,6 +2353,51 @@ return [[
                 ],
                 'nullable' => [
                     true,
+                ],
+            ],
+        ],
+        [
+            $o[0],
+        ],
+        []
+    );
+},
+46 => static function () {
+    return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
+        $o = [
+            clone (\Symfony\Component\VarExporter\Internal\Registry::$prototypes['Symfony\\Component\\Validator\\Constraints\\NotBlank'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Component\\Validator\\Constraints\\NotBlank')),
+        ],
+        null,
+        [
+            'stdClass' => [
+                'groups' => [
+                    [
+                        'Default',
+                    ],
+                ],
+            ],
+        ],
+        [
+            $o[0],
+        ],
+        []
+    );
+},
+47 => static function () {
+    return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
+        $o = [
+            clone (\Symfony\Component\VarExporter\Internal\Registry::$prototypes['Symfony\\Bridge\\Doctrine\\Validator\\Constraints\\UniqueEntity'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Symfony\\Bridge\\Doctrine\\Validator\\Constraints\\UniqueEntity')),
+        ],
+        null,
+        [
+            'stdClass' => [
+                'fields' => [
+                    'refreshToken',
+                ],
+                'groups' => [
+                    [
+                        'Default',
+                    ],
                 ],
             ],
         ],

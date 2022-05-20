@@ -12,49 +12,27 @@
 namespace Gesdinet\JWTRefreshTokenBundle\Event;
 
 use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Contracts\EventDispatcher\Event;
+use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
 
 class RefreshEvent extends Event
 {
-    private RefreshTokenInterface $refreshToken;
+    private $refreshToken;
 
-    private TokenInterface $token;
+    private $preAuthenticatedToken;
 
-    private ?string $firewallName;
-
-    public function __construct(RefreshTokenInterface $refreshToken, TokenInterface $token, ?string $firewallName = null)
+    public function __construct(RefreshTokenInterface $refreshToken, PostAuthenticationGuardToken $preAuthenticatedToken)
     {
         $this->refreshToken = $refreshToken;
-        $this->token = $token;
-        $this->firewallName = $firewallName;
+        $this->preAuthenticatedToken = $preAuthenticatedToken;
     }
 
-    /**
-     * @return RefreshTokenInterface
-     */
     public function getRefreshToken()
     {
         return $this->refreshToken;
     }
 
-    /**
-     * @return TokenInterface
-     *
-     * @deprecated use getToken() instead
-     */
     public function getPreAuthenticatedToken()
     {
-        return $this->getToken();
-    }
-
-    public function getToken(): TokenInterface
-    {
-        return $this->token;
-    }
-
-    public function getFirewallName(): ?string
-    {
-        return $this->firewallName;
+        return $this->preAuthenticatedToken;
     }
 }

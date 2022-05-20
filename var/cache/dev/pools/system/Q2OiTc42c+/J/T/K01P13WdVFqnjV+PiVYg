@@ -13,6 +13,11 @@ return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\
             'name' => [
                 'api_register',
             ],
+            'methods' => [
+                [
+                    'POST',
+                ],
+            ],
         ],
     ],
     [

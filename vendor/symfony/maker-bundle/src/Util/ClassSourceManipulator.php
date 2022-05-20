@@ -253,8 +253,7 @@ final class ClassSourceManipulator
 
     public function addGetter(string $propertyName, $returnType, bool $isReturnTypeNullable, array $commentLines = []): void
     {
-        $methodName = 'get'.Str::asCamelCase($propertyName);
-
+        $methodName = ('bool' === $returnType ? 'is' : 'get').Str::asCamelCase($propertyName);
         $this->addCustomGetter($propertyName, $methodName, $returnType, $isReturnTypeNullable, $commentLines);
     }
 
@@ -511,6 +510,13 @@ final class ClassSourceManipulator
 
         if (\is_array($value)) {
             throw new \Exception('Invalid value: loop before quoting.');
+        }
+
+        if (\function_exists('enum_exists')) {
+            // do we have an enum ?
+            if (\is_object($value) && enum_exists(\get_class($value))) {
+                $value = $value->value;
+            }
         }
 
         return sprintf('"%s"', $value);

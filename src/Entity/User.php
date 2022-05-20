@@ -90,8 +90,6 @@ class User implements UserInterface
      */
     private $image;
 
-
-
     public function getId(): ?int
     {
         return $this->id;

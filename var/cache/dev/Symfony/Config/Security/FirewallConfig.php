@@ -17,7 +17,6 @@ require_once __DIR__.\DIRECTORY_SEPARATOR.'FirewallConfig'.\DIRECTORY_SEPARATOR.
 require_once __DIR__.\DIRECTORY_SEPARATOR.'FirewallConfig'.\DIRECTORY_SEPARATOR.'HttpBasicConfig.php';
 require_once __DIR__.\DIRECTORY_SEPARATOR.'FirewallConfig'.\DIRECTORY_SEPARATOR.'HttpBasicLdapConfig.php';
 require_once __DIR__.\DIRECTORY_SEPARATOR.'FirewallConfig'.\DIRECTORY_SEPARATOR.'RememberMeConfig.php';
-require_once __DIR__.\DIRECTORY_SEPARATOR.'FirewallConfig'.\DIRECTORY_SEPARATOR.'RefreshJwtConfig.php';
 require_once __DIR__.\DIRECTORY_SEPARATOR.'FirewallConfig'.\DIRECTORY_SEPARATOR.'AnonymousConfig.php';
 
 use Symfony\Component\Config\Loader\ParamConfigurator;
@@ -59,7 +58,6 @@ class FirewallConfig
     private $httpBasic;
     private $httpBasicLdap;
     private $rememberMe;
-    private $refreshJwt;
     private $anonymous;
     private $_usedProperties = [];
     
@@ -437,18 +435,6 @@ class FirewallConfig
         return $this->rememberMe;
     }
     
-    public function refreshJwt(array $value = []): \Symfony\Config\Security\FirewallConfig\RefreshJwtConfig
-    {
-        if (null === $this->refreshJwt) {
-            $this->_usedProperties['refreshJwt'] = true;
-            $this->refreshJwt = new \Symfony\Config\Security\FirewallConfig\RefreshJwtConfig($value);
-        } elseif ([] !== $value) {
-            throw new InvalidConfigurationException('The node created by "refreshJwt()" has already been initialized. You cannot pass values the second time you call refreshJwt().');
-        }
-    
-        return $this->refreshJwt;
-    }
-    
     public function anonymous(array $value = []): \Symfony\Config\Security\FirewallConfig\AnonymousConfig
     {
         if (null === $this->anonymous) {
@@ -644,12 +630,6 @@ class FirewallConfig
             unset($value['remember_me']);
         }
     
-        if (array_key_exists('refresh_jwt', $value)) {
-            $this->_usedProperties['refreshJwt'] = true;
-            $this->refreshJwt = new \Symfony\Config\Security\FirewallConfig\RefreshJwtConfig($value['refresh_jwt']);
-            unset($value['refresh_jwt']);
-        }
-    
         if (array_key_exists('anonymous', $value)) {
             $this->_usedProperties['anonymous'] = true;
             $this->anonymous = new \Symfony\Config\Security\FirewallConfig\AnonymousConfig($value['anonymous']);
@@ -753,9 +733,6 @@ class FirewallConfig
         }
         if (isset($this->_usedProperties['rememberMe'])) {
             $output['remember_me'] = $this->rememberMe->toArray();
-        }
-        if (isset($this->_usedProperties['refreshJwt'])) {
-            $output['refresh_jwt'] = $this->refreshJwt->toArray();
         }
         if (isset($this->_usedProperties['anonymous'])) {
             $output['anonymous'] = $this->anonymous->toArray();

@@ -379,13 +379,13 @@
     <parameter key="api_platform.validator.serialize_payload_fields" type="collection"/>
     <parameter key="api_platform.elasticsearch.enabled">false</parameter>
     <parameter key="lexik_jwt_authentication.pass_phrase">%env(JWT_PASSPHRASE)%</parameter>
-    <parameter key="lexik_jwt_authentication.token_ttl">358283600</parameter>
+    <parameter key="lexik_jwt_authentication.token_ttl">3600</parameter>
     <parameter key="lexik_jwt_authentication.clock_skew">0</parameter>
     <parameter key="lexik_jwt_authentication.user_identity_field">email</parameter>
     <parameter key="lexik_jwt_authentication.user_id_claim">email</parameter>
     <parameter key="lexik_jwt_authentication.encoder.signature_algorithm">RS256</parameter>
     <parameter key="lexik_jwt_authentication.encoder.crypto_engine">openssl</parameter>
-    <parameter key="gesdinet_jwt_refresh_token.ttl">2592000</parameter>
+    <parameter key="gesdinet_jwt_refresh_token.ttl">3600</parameter>
     <parameter key="gesdinet_jwt_refresh_token.ttl_update">false</parameter>
     <parameter key="gesdinet_jwt_refresh_token.security.firewall">api</parameter>
     <parameter key="gesdinet_jwt_refresh_token.user_provider">security.user.provider.concrete.app_user_provider</parameter>
@@ -393,19 +393,7 @@
     <parameter key="gesdinet_jwt_refresh_token.single_use">false</parameter>
     <parameter key="gesdinet_jwt_refresh_token.token_parameter_name">refresh_token</parameter>
     <parameter key="gesdinet_jwt_refresh_token.doctrine_mappings">true</parameter>
-    <parameter key="gesdinet_jwt_refresh_token.cookie" type="collection">
-      <parameter key="enabled">false</parameter>
-      <parameter key="same_site">lax</parameter>
-      <parameter key="path">/</parameter>
-      <parameter key="domain">null</parameter>
-      <parameter key="http_only">true</parameter>
-      <parameter key="secure">true</parameter>
-      <parameter key="remove_token_from_body">true</parameter>
-    </parameter>
-    <parameter key="gesdinet_jwt_refresh_token.logout_firewall_context">security.firewall.map.context.api</parameter>
-    <parameter key="gesdinet_jwt_refresh_token.return_expiration">false</parameter>
-    <parameter key="gesdinet_jwt_refresh_token.return_expiration_parameter_name">refresh_token_expiration</parameter>
-    <parameter key="gesdinet.jwtrefreshtoken.refresh_token.class">App\Entity\RefreshToken</parameter>
+    <parameter key="gesdinet.jwtrefreshtoken.refresh_token.class">Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken</parameter>
     <parameter key="gesdinet.jwtrefreshtoken.object_manager.id">doctrine.orm.entity_manager</parameter>
     <parameter key="gesdinet.jwtrefreshtoken.user_checker.id">security.user_checker</parameter>
     <parameter key="maker.compatible_check.doctrine.supports_attributes">true</parameter>
@@ -1732,14 +1720,6 @@
         <argument type="collection">
           <argument type="service_closure" id="gesdinet.jwtrefreshtoken.send_token"/>
           <argument>attachRefreshToken</argument>
-        </argument>
-        <argument>0</argument>
-      </call>
-      <call method="addListener">
-        <argument>Symfony\Component\Security\Http\Event\LogoutEvent</argument>
-        <argument type="collection">
-          <argument type="service_closure" id="Gesdinet\JWTRefreshTokenBundle\EventListener\LogoutEventListener"/>
-          <argument>onLogout</argument>
         </argument>
         <argument>0</argument>
       </call>
@@ -3802,14 +3782,6 @@
       <call method="addListener">
         <argument>Symfony\Component\Security\Http\Event\LogoutEvent</argument>
         <argument type="collection">
-          <argument type="service_closure" id="Gesdinet\JWTRefreshTokenBundle\EventListener\LogoutEventListener"/>
-          <argument>onLogout</argument>
-        </argument>
-        <argument>0</argument>
-      </call>
-      <call method="addListener">
-        <argument>Symfony\Component\Security\Http\Event\LogoutEvent</argument>
-        <argument type="collection">
           <argument type="service_closure" id="security.logout.listener.csrf_token_clearing"/>
           <argument>onLogout</argument>
         </argument>
@@ -3913,14 +3885,6 @@
       <call method="addListener">
         <argument>Symfony\Component\Security\Http\Event\LogoutEvent</argument>
         <argument type="collection">
-          <argument type="service_closure" id="Gesdinet\JWTRefreshTokenBundle\EventListener\LogoutEventListener"/>
-          <argument>onLogout</argument>
-        </argument>
-        <argument>0</argument>
-      </call>
-      <call method="addListener">
-        <argument>Symfony\Component\Security\Http\Event\LogoutEvent</argument>
-        <argument type="collection">
           <argument type="service_closure" id="security.logout.listener.csrf_token_clearing"/>
           <argument>onLogout</argument>
         </argument>
@@ -3981,14 +3945,6 @@
     </service>
     <service id="security.event_dispatcher.api" class="Symfony\Component\EventDispatcher\EventDispatcher">
       <tag name="security.event_dispatcher.api">event_dispatcher.dispatcher</tag>
-      <call method="addListener">
-        <argument>Symfony\Component\Security\Http\Event\LogoutEvent</argument>
-        <argument type="collection">
-          <argument type="service_closure" id="Gesdinet\JWTRefreshTokenBundle\EventListener\LogoutEventListener"/>
-          <argument>onLogout</argument>
-        </argument>
-        <argument>0</argument>
-      </call>
       <call method="addListener">
         <argument>Symfony\Component\Security\Http\Event\LogoutEvent</argument>
         <argument type="collection">
@@ -4094,14 +4050,6 @@
     </service>
     <service id="security.event_dispatcher.main" class="Symfony\Component\EventDispatcher\EventDispatcher">
       <tag name="security.event_dispatcher.main">event_dispatcher.dispatcher</tag>
-      <call method="addListener">
-        <argument>Symfony\Component\Security\Http\Event\LogoutEvent</argument>
-        <argument type="collection">
-          <argument type="service_closure" id="Gesdinet\JWTRefreshTokenBundle\EventListener\LogoutEventListener"/>
-          <argument>onLogout</argument>
-        </argument>
-        <argument>0</argument>
-      </call>
       <call method="addListener">
         <argument>Symfony\Component\Security\Http\Event\LogoutEvent</argument>
         <argument type="collection">
@@ -4578,15 +4526,8 @@
       <argument type="service" id="annotations.cached_reader"/>
       <argument type="collection">
         <argument>/home/terres-rabii/Documents/travail/Pfe/Projet-Oaca/src/Entity</argument>
+        <argument>/home/terres-rabii/Documents/travail/Pfe/Projet-Oaca/vendor/gesdinet/jwt-refresh-token-bundle/Entity</argument>
       </argument>
-    </service>
-    <service id="doctrine.orm.default_xml_metadata_driver" class="Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver">
-      <argument type="collection">
-        <argument key="/home/terres-rabii/Documents/travail/Pfe/Projet-Oaca/vendor/gesdinet/jwt-refresh-token-bundle/Resources/config/doctrine">Gesdinet\JWTRefreshTokenBundle\Entity</argument>
-      </argument>
-      <call method="setGlobalBasename">
-        <argument>mapping</argument>
-      </call>
     </service>
     <service id="cache.doctrine.orm.default.metadata" class="Symfony\Component\Cache\Adapter\ArrayAdapter"/>
     <service id="cache.doctrine.orm.default.result" class="Symfony\Component\Cache\Adapter\ArrayAdapter">
@@ -5708,7 +5649,7 @@
       <argument type="service" id="lexik_jwt_authentication.key_loader.raw"/>
       <argument>openssl</argument>
       <argument>RS256</argument>
-      <argument>358283600</argument>
+      <argument>3600</argument>
       <argument>0</argument>
       <deprecated package="lexik/jwt-authentication-bundle" version="2.5">The "%service_id%" is deprecated since version 2.5 and will be removed in 5.0, use "lexik_jwt_authentication.jws_provider.lcobucci" instead.</deprecated>
     </service>
@@ -5742,7 +5683,7 @@
       <argument type="service" id="lexik_jwt_authentication.key_loader.raw"/>
       <argument>openssl</argument>
       <argument>RS256</argument>
-      <argument>358283600</argument>
+      <argument>3600</argument>
       <argument>0</argument>
     </service>
     <service id="lexik_jwt_authentication.handler.authentication_success" class="Lexik\Bundle\JWTAuthenticationBundle\Security\Http\Authentication\AuthenticationSuccessHandler">
@@ -5861,7 +5802,7 @@
           </argument>
           <argument type="collection">
             <argument>Gesdinet\JWTRefreshTokenBundle\Entity</argument>
-            <argument type="service" id="doctrine.orm.default_xml_metadata_driver"/>
+            <argument type="service" id="doctrine.orm.default_annotation_metadata_driver"/>
           </argument>
         </argument>
       </argument>
@@ -7051,42 +6992,16 @@
     <service id="gesdinet.jwtrefreshtoken.send_token" class="Gesdinet\JWTRefreshTokenBundle\EventListener\AttachRefreshTokenOnSuccessListener">
       <tag name="kernel.event_listener" event="lexik_jwt_authentication.on_authentication_success" method="attachRefreshToken"/>
       <argument type="service" id="gesdinet.jwtrefreshtoken.refresh_token_manager"/>
-      <argument>%gesdinet_jwt_refresh_token.ttl%</argument>
+      <argument>3600</argument>
+      <argument type="service" id="validator"/>
       <argument type="service" id="request_stack"/>
-      <argument>%gesdinet_jwt_refresh_token.token_parameter_name%</argument>
-      <argument>%gesdinet_jwt_refresh_token.single_use%</argument>
-      <argument type="service" id="gesdinet.jwtrefreshtoken.refresh_token_generator"/>
-      <argument type="service" id="gesdinet.jwtrefreshtoken.request.extractor.chain"/>
-      <argument>%gesdinet_jwt_refresh_token.cookie%</argument>
-      <argument>%gesdinet_jwt_refresh_token.return_expiration%</argument>
-      <argument>%gesdinet_jwt_refresh_token.return_expiration_parameter_name%</argument>
-    </service>
-    <service id="gesdinet.jwtrefreshtoken.refresh_token_generator" class="Gesdinet\JWTRefreshTokenBundle\Generator\RefreshTokenGenerator" public="true">
-      <argument type="service" id="gesdinet.jwtrefreshtoken.refresh_token_manager"/>
+      <argument>email</argument>
+      <argument>refresh_token</argument>
+      <argument>false</argument>
     </service>
     <service id="gesdinet.jwtrefreshtoken.refresh_token_manager" class="Gesdinet\JWTRefreshTokenBundle\Doctrine\RefreshTokenManager" public="true">
       <argument type="service" id="doctrine.orm.default_entity_manager"/>
-      <argument>%gesdinet.jwtrefreshtoken.refresh_token.class%</argument>
-    </service>
-    <service id="gesdinet.jwtrefreshtoken.request.extractor.chain" class="Gesdinet\JWTRefreshTokenBundle\Request\Extractor\ChainExtractor" public="true">
-      <call method="addExtractor">
-        <argument type="service" id="gesdinet.jwtrefreshtoken.request.extractor.request_body"/>
-      </call>
-      <call method="addExtractor">
-        <argument type="service" id="gesdinet.jwtrefreshtoken.request.extractor.request_parameter"/>
-      </call>
-      <call method="addExtractor">
-        <argument type="service" id="gesdinet.jwtrefreshtoken.request.extractor.request_cookie"/>
-      </call>
-    </service>
-    <service id="gesdinet.jwtrefreshtoken.request.extractor.request_body" class="Gesdinet\JWTRefreshTokenBundle\Request\Extractor\RequestBodyExtractor">
-      <tag name="gesdinet_jwt_refresh_token.request_extractor"/>
-    </service>
-    <service id="gesdinet.jwtrefreshtoken.request.extractor.request_parameter" class="Gesdinet\JWTRefreshTokenBundle\Request\Extractor\RequestParameterExtractor">
-      <tag name="gesdinet_jwt_refresh_token.request_extractor"/>
-    </service>
-    <service id="gesdinet.jwtrefreshtoken.request.extractor.request_cookie" class="Gesdinet\JWTRefreshTokenBundle\Request\Extractor\RequestCookieExtractor">
-      <tag name="gesdinet_jwt_refresh_token.request_extractor"/>
+      <argument>Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken</argument>
     </service>
     <service id="gesdinet.jwtrefreshtoken" class="Gesdinet\JWTRefreshTokenBundle\Service\RefreshToken" public="true">
       <argument type="service" id="gesdinet.jwtrefreshtoken.authenticator"/>
@@ -7094,41 +7009,20 @@
       <argument type="service" id="lexik_jwt_authentication.handler.authentication_success"/>
       <argument type="service" id="lexik_jwt_authentication.handler.authentication_failure"/>
       <argument type="service" id="gesdinet.jwtrefreshtoken.refresh_token_manager"/>
-      <argument>%gesdinet_jwt_refresh_token.ttl%</argument>
-      <argument>%gesdinet_jwt_refresh_token.security.firewall%</argument>
-      <argument>%gesdinet_jwt_refresh_token.ttl_update%</argument>
+      <argument>3600</argument>
+      <argument>api</argument>
+      <argument>false</argument>
       <argument type="service" id="debug.event_dispatcher"/>
-      <deprecated package="gesdinet/jwt-refresh-token-bundle" version="1.0">The "%service_id%" service is deprecated.</deprecated>
     </service>
     <service id="gesdinet.jwtrefreshtoken.user_provider" class="Gesdinet\JWTRefreshTokenBundle\Security\Provider\RefreshTokenProvider">
       <argument type="service" id="gesdinet.jwtrefreshtoken.refresh_token_manager"/>
       <call method="setCustomUserProvider">
         <argument type="service" id="security.user.provider.concrete.app_user_provider" on-invalid="null"/>
       </call>
-      <deprecated package="gesdinet/jwt-refresh-token-bundle" version="1.0">The "%service_id%" service is deprecated.</deprecated>
     </service>
     <service id="gesdinet.jwtrefreshtoken.authenticator" class="Gesdinet\JWTRefreshTokenBundle\Security\Authenticator\RefreshTokenAuthenticator">
       <argument type="service" id="security.user_checker"/>
-      <argument>%gesdinet_jwt_refresh_token.token_parameter_name%</argument>
-      <argument type="service" id="gesdinet.jwtrefreshtoken.request.extractor.chain"/>
-      <deprecated package="gesdinet/jwt-refresh-token-bundle" version="1.0">The "%service_id%" service is deprecated.</deprecated>
-    </service>
-    <service id="gesdinet.jwtrefreshtoken.security.authentication.failure_handler" class="Gesdinet\JWTRefreshTokenBundle\Security\Http\Authentication\AuthenticationFailureHandler">
-      <argument type="service" id="debug.event_dispatcher"/>
-    </service>
-    <service id="gesdinet.jwtrefreshtoken.security.authentication.success_handler" class="Gesdinet\JWTRefreshTokenBundle\Security\Http\Authentication\AuthenticationSuccessHandler">
-      <argument type="service" id="lexik_jwt_authentication.handler.authentication_success"/>
-      <argument type="service" id="debug.event_dispatcher"/>
-    </service>
-    <service id="gesdinet.jwtrefreshtoken.security.refresh_token_authenticator" class="Gesdinet\JWTRefreshTokenBundle\Security\Http\Authenticator\RefreshTokenAuthenticator" abstract="true">
-      <argument type="service" id="gesdinet.jwtrefreshtoken.refresh_token_manager"/>
-      <argument type="service" id="debug.event_dispatcher"/>
-      <argument type="service" id="gesdinet.jwtrefreshtoken.request.extractor.chain"/>
-      <argument type="abstract">user provider</argument>
-      <argument type="abstract">authentication success handler</argument>
-      <argument type="abstract">authentication failure handler</argument>
-      <argument type="abstract">options</argument>
-      <argument type="service" id="security.http_utils"/>
+      <argument>refresh_token</argument>
     </service>
     <service id="Gesdinet\JWTRefreshTokenBundle\Command\ClearInvalidRefreshTokensCommand" class="Gesdinet\JWTRefreshTokenBundle\Command\ClearInvalidRefreshTokensCommand">
       <tag name="console.command"/>
@@ -7145,14 +7039,6 @@
       <call method="setName">
         <argument>gesdinet:jwt:revoke</argument>
       </call>
-    </service>
-    <service id="Gesdinet\JWTRefreshTokenBundle\EventListener\LogoutEventListener" class="Gesdinet\JWTRefreshTokenBundle\EventListener\LogoutEventListener">
-      <tag name="kernel.event_listener" event="Symfony\Component\Security\Http\Event\LogoutEvent" method="onLogout"/>
-      <argument type="service" id="gesdinet.jwtrefreshtoken.refresh_token_manager"/>
-      <argument type="service" id="gesdinet.jwtrefreshtoken.request.extractor.chain"/>
-      <argument>%gesdinet_jwt_refresh_token.token_parameter_name%</argument>
-      <argument>%gesdinet_jwt_refresh_token.cookie%</argument>
-      <argument>%gesdinet_jwt_refresh_token.logout_firewall_context%</argument>
     </service>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\AuthController" class="App\Controller\AuthController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\AuthController" class="App\Controller\AuthController" autowire="true" abstract="true"/>
@@ -7949,7 +7835,39 @@
         <argument>App\Entity</argument>
       </call>
       <call method="addDriver">
-        <argument type="service" id="doctrine.orm.default_xml_metadata_driver"/>
+        <argument type="service" id="doctrine.orm.default_annotation_metadata_driver"/>
+        <argument>Gesdinet\JWTRefreshTokenBundle\Entity</argument>
+      </call>
+      <call method="addDriver">
+        <argument type="service">
+          <service class="Doctrine\ORM\Mapping\Driver\XmlDriver">
+            <argument type="service">
+              <service class="Doctrine\Persistence\Mapping\Driver\SymfonyFileLocator">
+                <argument type="collection">
+                  <argument key="/home/terres-rabii/Documents/travail/Pfe/Projet-Oaca/vendor/gesdinet/jwt-refresh-token-bundle/Resources/config/orm/doctrine-orm">Gesdinet\JWTRefreshTokenBundle\Entity</argument>
+                  <argument key="/home/terres-rabii/Documents/travail/Pfe/Projet-Oaca/vendor/gesdinet/jwt-refresh-token-bundle/Resources/config/orm/doctrine-entity">Gesdinet\JWTRefreshTokenBundle\Entity</argument>
+                </argument>
+                <argument>.orm.xml</argument>
+              </service>
+            </argument>
+          </service>
+        </argument>
+        <argument>Gesdinet\JWTRefreshTokenBundle\Entity</argument>
+      </call>
+      <call method="addDriver">
+        <argument type="service">
+          <service class="Doctrine\ORM\Mapping\Driver\XmlDriver">
+            <argument type="service">
+              <service class="Doctrine\Persistence\Mapping\Driver\SymfonyFileLocator">
+                <argument type="collection">
+                  <argument key="/home/terres-rabii/Documents/travail/Pfe/Projet-Oaca/vendor/gesdinet/jwt-refresh-token-bundle/Resources/config/orm/doctrine-orm">Gesdinet\JWTRefreshTokenBundle\Entity</argument>
+                  <argument key="/home/terres-rabii/Documents/travail/Pfe/Projet-Oaca/vendor/gesdinet/jwt-refresh-token-bundle/Resources/config/orm/doctrine-entity">Gesdinet\JWTRefreshTokenBundle\Entity</argument>
+                </argument>
+                <argument>.orm.xml</argument>
+              </service>
+            </argument>
+          </service>
+        </argument>
         <argument>Gesdinet\JWTRefreshTokenBundle\Entity</argument>
       </call>
     </service>
@@ -8830,9 +8748,7 @@
     <service id="jms_serializer.event_dispatcher" alias="jms_serializer.traceable_event_dispatcher"/>
     <service id="sensio_framework_extra.converter.doctrine.orm.expression_language" alias="sensio_framework_extra.converter.doctrine.orm.expression_language.default"/>
     <service id="sensio_framework_extra.security.expression_language" alias="sensio_framework_extra.security.expression_language.default"/>
-    <service id="Gesdinet\JWTRefreshTokenBundle\Generator\RefreshTokenGeneratorInterface" alias="gesdinet.jwtrefreshtoken.refresh_token_generator"/>
     <service id="Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface" alias="gesdinet.jwtrefreshtoken.refresh_token_manager"/>
-    <service id="Gesdinet\JWTRefreshTokenBundle\Request\Extractor\ExtractorInterface" alias="gesdinet.jwtrefreshtoken.request.extractor.chain"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.gSv9zYw" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
     <service id="argument_resolver.controller_locator" alias=".service_locator.EJj7jNB"/>

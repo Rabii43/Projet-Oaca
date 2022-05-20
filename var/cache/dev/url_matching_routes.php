@@ -8,7 +8,7 @@
 return [
     false, // $matchHost
     [ // $staticRoutes
-        '/register' => [[['_route' => 'api_register', '_controller' => 'App\\Controller\\AuthController::register'], null, null, null, false, false, null]],
+        '/register' => [[['_route' => 'api_register', '_controller' => 'App\\Controller\\AuthController::register'], null, ['POST' => 0], null, false, false, null]],
         '/login' => [[['_route' => 'api_login', '_controller' => 'App\\Controller\\AuthController::getTokenUser'], null, null, null, false, false, null]],
         '/api/activateAccount' => [[['_route' => 'activate_account', '_controller' => 'App\\Controller\\AuthController::activateAccount'], null, ['POST' => 0], null, false, false, null]],
         '/reset/reset-password' => [[['_route' => 'app_forgotten_password', '_controller' => 'App\\Controller\\AuthController::resetPassword'], null, ['POST' => 0], null, false, false, null]],

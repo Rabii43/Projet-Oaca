@@ -2,7 +2,6 @@
 
 namespace Symfony\Config;
 
-require_once __DIR__.\DIRECTORY_SEPARATOR.'GesdinetJwtRefreshToken'.\DIRECTORY_SEPARATOR.'CookieConfig.php';
 
 use Symfony\Component\Config\Loader\ParamConfigurator;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
@@ -27,14 +26,9 @@ class GesdinetJwtRefreshTokenConfig implements \Symfony\Component\Config\Builder
     private $singleUse;
     private $tokenParameterName;
     private $doctrineMappings;
-    private $cookie;
-    private $logoutFirewall;
-    private $returnExpiration;
-    private $returnExpirationParameterName;
     private $_usedProperties = [];
     
     /**
-     * The default TTL for all authenticators.
      * @default 2592000
      * @param ParamConfigurator|int $value
      * @return $this
@@ -48,7 +42,6 @@ class GesdinetJwtRefreshTokenConfig implements \Symfony\Component\Config\Builder
     }
     
     /**
-     * The default update TTL flag for all authenticators.
      * @default false
      * @param ParamConfigurator|bool $value
      * @return $this
@@ -64,7 +57,6 @@ class GesdinetJwtRefreshTokenConfig implements \Symfony\Component\Config\Builder
     /**
      * @default 'api'
      * @param ParamConfigurator|mixed $value
-     * @deprecated The "firewall" node is deprecated without replacement.
      * @return $this
      */
     public function firewall($value): self
@@ -78,7 +70,6 @@ class GesdinetJwtRefreshTokenConfig implements \Symfony\Component\Config\Builder
     /**
      * @default null
      * @param ParamConfigurator|mixed $value
-     * @deprecated The "user_provider" node is deprecated without replacement.
      * @return $this
      */
     public function userProvider($value): self
@@ -92,7 +83,6 @@ class GesdinetJwtRefreshTokenConfig implements \Symfony\Component\Config\Builder
     /**
      * @default 'username'
      * @param ParamConfigurator|mixed $value
-     * @deprecated The "user_identity_field" node is deprecated without replacement.
      * @return $this
      */
     public function userIdentityField($value): self
@@ -104,7 +94,7 @@ class GesdinetJwtRefreshTokenConfig implements \Symfony\Component\Config\Builder
     }
     
     /**
-     * Set the type of object manager to use (default: orm)
+     * Set manager mode instead of default one (orm)
      * @default 'orm'
      * @param ParamConfigurator|mixed $value
      * @return $this
@@ -118,7 +108,7 @@ class GesdinetJwtRefreshTokenConfig implements \Symfony\Component\Config\Builder
     }
     
     /**
-     * Set the refresh token class to use (default: Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken)
+     * Set another refresh token class to use instead of default one (Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken)
      * @default null
      * @param ParamConfigurator|mixed $value
      * @return $this
@@ -132,7 +122,7 @@ class GesdinetJwtRefreshTokenConfig implements \Symfony\Component\Config\Builder
     }
     
     /**
-     * Set the object manager to use (default: doctrine.orm.entity_manager)
+     * Set object manager to use (default: doctrine.orm.entity_manager)
      * @default null
      * @param ParamConfigurator|mixed $value
      * @return $this
@@ -148,7 +138,6 @@ class GesdinetJwtRefreshTokenConfig implements \Symfony\Component\Config\Builder
     /**
      * @default 'security.user_checker'
      * @param ParamConfigurator|mixed $value
-     * @deprecated The "user_checker" node is deprecated without replacement.
      * @return $this
      */
     public function userChecker($value): self
@@ -160,10 +149,9 @@ class GesdinetJwtRefreshTokenConfig implements \Symfony\Component\Config\Builder
     }
     
     /**
-     * Set the refresh token class to use (default: Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken)
+     * Deprecated, use refresh_token_class instead
      * @default null
      * @param ParamConfigurator|mixed $value
-     * @deprecated The "refresh_token_entity" node is deprecated, use the "refresh_token_class" node instead.
      * @return $this
      */
     public function refreshTokenEntity($value): self
@@ -175,10 +163,9 @@ class GesdinetJwtRefreshTokenConfig implements \Symfony\Component\Config\Builder
     }
     
     /**
-     * Set the entity manager to use
+     * Deprecated, use object_manager instead
      * @default null
      * @param ParamConfigurator|mixed $value
-     * @deprecated The "entity_manager" node is deprecated, use the "object_manager" node instead.
      * @return $this
      */
     public function entityManager($value): self
@@ -204,7 +191,6 @@ class GesdinetJwtRefreshTokenConfig implements \Symfony\Component\Config\Builder
     }
     
     /**
-     * The default request parameter name containing the refresh token for all authenticators.
      * @default 'refresh_token'
      * @param ParamConfigurator|mixed $value
      * @return $this
@@ -221,67 +207,12 @@ class GesdinetJwtRefreshTokenConfig implements \Symfony\Component\Config\Builder
      * When true, resolving of Doctrine mapping is done automatically to use either ORM or ODM object manager
      * @default true
      * @param ParamConfigurator|bool $value
-     * @deprecated The "doctrine_mappings" node is deprecated without replacement.
      * @return $this
      */
     public function doctrineMappings($value): self
     {
         $this->_usedProperties['doctrineMappings'] = true;
         $this->doctrineMappings = $value;
-    
-        return $this;
-    }
-    
-    public function cookie(array $value = []): \Symfony\Config\GesdinetJwtRefreshToken\CookieConfig
-    {
-        if (null === $this->cookie) {
-            $this->_usedProperties['cookie'] = true;
-            $this->cookie = new \Symfony\Config\GesdinetJwtRefreshToken\CookieConfig($value);
-        } elseif ([] !== $value) {
-            throw new InvalidConfigurationException('The node created by "cookie()" has already been initialized. You cannot pass values the second time you call cookie().');
-        }
-    
-        return $this->cookie;
-    }
-    
-    /**
-     * Name of the firewall that triggers the logout event to hook into (default: api)
-     * @default 'api'
-     * @param ParamConfigurator|mixed $value
-     * @return $this
-     */
-    public function logoutFirewall($value): self
-    {
-        $this->_usedProperties['logoutFirewall'] = true;
-        $this->logoutFirewall = $value;
-    
-        return $this;
-    }
-    
-    /**
-     * When true, the response will include the token expiration timestamp
-     * @default false
-     * @param ParamConfigurator|mixed $value
-     * @return $this
-     */
-    public function returnExpiration($value): self
-    {
-        $this->_usedProperties['returnExpiration'] = true;
-        $this->returnExpiration = $value;
-    
-        return $this;
-    }
-    
-    /**
-     * The default response parameter name containing the refresh token expiration timestamp
-     * @default 'refresh_token_expiration'
-     * @param ParamConfigurator|mixed $value
-     * @return $this
-     */
-    public function returnExpirationParameterName($value): self
-    {
-        $this->_usedProperties['returnExpirationParameterName'] = true;
-        $this->returnExpirationParameterName = $value;
     
         return $this;
     }
@@ -378,30 +309,6 @@ class GesdinetJwtRefreshTokenConfig implements \Symfony\Component\Config\Builder
             unset($value['doctrine_mappings']);
         }
     
-        if (array_key_exists('cookie', $value)) {
-            $this->_usedProperties['cookie'] = true;
-            $this->cookie = new \Symfony\Config\GesdinetJwtRefreshToken\CookieConfig($value['cookie']);
-            unset($value['cookie']);
-        }
-    
-        if (array_key_exists('logout_firewall', $value)) {
-            $this->_usedProperties['logoutFirewall'] = true;
-            $this->logoutFirewall = $value['logout_firewall'];
-            unset($value['logout_firewall']);
-        }
-    
-        if (array_key_exists('return_expiration', $value)) {
-            $this->_usedProperties['returnExpiration'] = true;
-            $this->returnExpiration = $value['return_expiration'];
-            unset($value['return_expiration']);
-        }
-    
-        if (array_key_exists('return_expiration_parameter_name', $value)) {
-            $this->_usedProperties['returnExpirationParameterName'] = true;
-            $this->returnExpirationParameterName = $value['return_expiration_parameter_name'];
-            unset($value['return_expiration_parameter_name']);
-        }
-    
         if ([] !== $value) {
             throw new InvalidConfigurationException(sprintf('The following keys are not supported by "%s": ', __CLASS__).implode(', ', array_keys($value)));
         }
@@ -451,18 +358,6 @@ class GesdinetJwtRefreshTokenConfig implements \Symfony\Component\Config\Builder
         }
         if (isset($this->_usedProperties['doctrineMappings'])) {
             $output['doctrine_mappings'] = $this->doctrineMappings;
-        }
-        if (isset($this->_usedProperties['cookie'])) {
-            $output['cookie'] = $this->cookie->toArray();
-        }
-        if (isset($this->_usedProperties['logoutFirewall'])) {
-            $output['logout_firewall'] = $this->logoutFirewall;
-        }
-        if (isset($this->_usedProperties['returnExpiration'])) {
-            $output['return_expiration'] = $this->returnExpiration;
-        }
-        if (isset($this->_usedProperties['returnExpirationParameterName'])) {
-            $output['return_expiration_parameter_name'] = $this->returnExpirationParameterName;
         }
     
         return $output;
